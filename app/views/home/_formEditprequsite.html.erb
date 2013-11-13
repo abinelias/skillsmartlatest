@@ -1,0 +1,163 @@
+<style>
+	table.serifa{font-family:Arial,Helvetica,sans-serif;}
+</style>
+
+<style>
+	
+	.outer_container
+	{
+		margin:10px;
+		width = 70%
+	}
+	
+	.preDrop { width:250px; }
+	.subPredrops { width:250px; }
+</style>
+
+
+
+<script>
+	$(document).ready(function(){
+	    $("#tabl").hide();
+	    $('#tabl').append($('<table  border =0 cellpadding="5"><tr  bgcolor="#4D94FF"><td width = 51%>Prerequisites</td><td width = 35%>Requirement</td></tr>'));
+	});	
+</script>
+
+<script>
+	$(document).ready(function(){
+		$("#mydiv").hide();
+		$('.preDrop').change(function() 
+		{
+			$.ajax({ 
+				  type: 'GET', 
+				  url: '/home/popSecondPre', 
+				  data: {'id' : $('.preDrop').val()},
+				  success: function(data) 
+				  {
+						   $('#presecDrop').empty();
+						   $('#presecDrop').append( $('<option value= "">Select Specialty</option>'));						   
+						   $.each(data,function(i, v) {
+						   $('#presecDrop').append( $('<option value="'+ data[i][0] +'">'+data[i][1] +'</option>'));
+						 });
+				  } 
+			  });
+		});
+	});	
+</script>
+
+<script>
+	$(document).ready(function(){
+
+		$('.subPredrops').change(function() 
+		{
+			$.ajax({ 
+				  type: 'GET', 
+				  url: '/home/PopThirdPre', 
+				  data: {'id' : $('.subPredrops').val()},
+				  success: function(data) 
+				  {
+						   $('#preTxt').empty();	
+						   $('#preTxt').append('click checkbox to add Prerequsites');
+						   $('.thirdPre').empty();
+						   $.each(data,function(i, v) {
+						   $('.thirdPre').append( $('<div><span>-</span><input id="prechk_'+data[i][0]+'" type="checkbox" onchange="validatepre(\''+data[i][0]+'\')" name="prerequsite" class = "preboox" value="'+ data[i][0] +'" /><span >'+data[i][1] +'</span></div>'));
+						  
+						 });
+				  } 
+			  });
+		});
+	});	
+</script>
+
+<script>
+	function validatepre(val)		  
+	{	
+		var jobID 		 	 = 		document.getElementById("jobID");
+		var jobIDVal 		 = 		jobID.value;
+		var prechkId		 =		"#prechk_"+val
+		if($(prechkId).is(':checked'))
+		{
+			$.ajax({ 
+					  type: 'GET', 
+					  url: '/home/addPrequisite', 
+					  data: {'id' : val, 'jobID' : jobIDVal},
+					  success: function(data) 
+					  {
+							prename		=	data.prename
+							preid		=	data.preid
+							$('#prerequsite').append($('<div class="'+preid+'"><input type ="text" value ="'+prename+'" disabled></div>'));
+							$('#prerequsiteOpt').append($('<select id="drp_'+val+'" ><option value="0">Required</option><option value="1">Prefered</option><option value="2">Acceptable</option></select></div>'));
+					  } 
+				  });
+		}
+		
+	}
+</script>
+
+<div class = "textfont">
+	<input type="hidden" value="<%= @jobID %>"  name="prospect">
+	<input type = "hidden" name = "jobIDVal" id = "jobID" value = <%= @jobID %> >
+	<table align ="center" class ="serifa" >
+		 <tr>
+			<td>Title</td><td><input type="text" style="height:25px;font-size:10pt;" size=80"  value="<%= @jobName %>" name="title" id="title"> </td>
+		 </tr>
+	</table>
+
+	<div class="outer_container">
+		<div class = "textfont" style="width:60%;float:left;">
+			<div style="width:100%;">
+				<table  width="500px">
+					<tr>
+						<td width="200px">
+							please select your category
+						</td>
+						<td width="300px">
+						
+							<%= select_tag "sel_group", options_for_select(@prerequsite) ,{:class => "preDrop"} %>
+						</td>
+					</tr>
+					<tr>
+						<td width="200px">
+							please select your Specialty
+						</td>
+						<td width="300px">
+						
+							<%= select_tag "sel_group1", options_for_select(@subprerequsite), {:id => "presecDrop" , :class => "subPredrops"} %>
+						</td>
+					</tr>		
+					<tr>
+				</table>
+			</div>
+			<div style="width:100%;">
+					<span id ="preTxt"></span>
+					<div class="thirdPre" style="align:center; width:60%;"></div>
+			</div>		
+		</div>
+		<div  STYLE="margin-left: 60%">
+			<table style="width:72%;">
+				<tr  bgcolor="#edf2f4"><td width = 51%>Prerequisites</td><td width = 35%>Requirement</td></tr>
+				<% unless(@preARY.nil?)%>
+					<% @preARY.each do |value| %>
+						<tr>
+							<td><%= value['jobName'].to_s %></td>
+							<td><select><option value="0">Required</option><option value="1">Prefered</option><option value="2">Acceptable</option></select></td>
+						</tr>
+					<% end %>
+				<% end %>
+				<tr>
+					<td>
+						<div id ="prerequsite">
+						</div>
+					</td>	
+					<td>
+						<div id ="prerequsiteOpt">
+						</div>
+					</td>
+				</tr>	
+			</table>			
+		</div>	
+	</div>
+</div>
+				
+				
+				

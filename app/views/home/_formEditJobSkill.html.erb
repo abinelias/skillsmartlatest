@@ -1,0 +1,323 @@
+<style>
+
+	
+	.outer_container
+	{
+		margin:10px;
+	}
+	
+	
+	.drop { width:250px; }
+	.drops { width:250px; }
+</style>
+
+<style>
+	table.serifa{font-family:Arial,Helvetica,sans-serif;}
+</style>
+
+<script>
+	$(document).ready(function(){
+	    $("#tabl").hide();
+	    $('#tabl').append($('<table  border =0 cellpadding="5"><tr  bgcolor="#4D94FF"><td width = 41%>Skill</td><td>Proficiency</td><td>Importance</td> <td>Required</td></tr>'));
+	});	
+</script>	
+
+<script>
+	$(document).ready(function(){
+		$("#mydiv").hide();
+		$("#btn").hide();
+		$('.drop').change(function() 
+		{
+			$.ajax({ 
+				  type: 'GET', 
+				  url: '/jobseeker/popSecond', 
+				  data: {'id' : $('.drop').val()},
+				  success: function(data) 
+				  {
+						   $('#secDrop').empty();
+						   $('#secDrop').append( $('<option value= "">Select Specialty</option>'));						   
+						   $.each(data,function(i, v) {
+						   $('#secDrop').append( $('<option value="'+ data[i][0] +'">'+data[i][1] +'</option>'));
+						 });
+				  } 
+			  });
+		});
+	});	
+</script>
+
+<script>
+	$(document).ready(function(){
+
+		$('.drops').change(function() 
+		{
+			$.ajax({ 
+				  type: 'GET', 
+				  url: '/jobseeker/PopThird', 
+				  data: {'id' : $('.drops').val()},
+				  success: function(data) 
+				  {
+						   $('#txt').empty();	
+						   $('#txt').append('click checkbox to add your Skill');
+						   $('.my').empty();
+						   $.each(data,function(i, v) {
+						   $('.my').append( $('<div><span>-</span><input id="chk_'+data[i][0]+'" type="checkbox" onchange="validate(\''+data[i][0]+'\')" name="skill" class = "boox" value="'+ data[i][0] +'" /><span >'+data[i][1] +'</span></div>'));
+						  
+						 });
+				  } 
+			  });
+		});
+	});	
+</script>
+
+<script>
+	function validate(val)		  
+	{	
+		var jobID 		 	 = 		document.getElementById("jobID");
+		var jobIDVal 		 = 		jobID.value;
+		$("#skill").show();
+		$("#tabl").show();
+		$("#btn").show();
+		var chkId="#chk_"+val
+		if($(chkId).is(':checked'))
+		{
+			$.ajax({ 
+					  type: 'GET', 
+					  url: '/home/addRequiredSkills', 
+					  data: {'id' : val, 'jobID' : jobIDVal},
+					  success: function(data) 
+					  {
+							skillname	=	data.skillname
+							skillid		=	data.skillid
+							$('#skillName').append($('<div class="'+skillid+'"><input type ="text" size="8%" value ="'+skillname+'" disabled></div>'));
+							$('#skillProf').append($('<div class="'+skillid+'"><input type ="text" value ="" size="5%" id="rank_'+val+'" onblur="validateRank(\''+val+'\')" ></div>'));
+							$('#skillImp').append($('<div class="'+skillid+'"><input type ="text" value ="" size="5%" id="prior_'+val+'" onblur="validatePrior(\''+val+'\')"></div>'));
+							$('#skillReq').append($('<div class="'+skillid+'"><select id="drp_'+val+'" onchange="validateDesOrPri(\''+val+'\')" ><option value="1">YES</option><option value="0">NO</option></select></div>'));
+							
+					  } 
+				  });
+		}
+		else
+		{
+			$.ajax({ 
+					  type: 'GET', 
+					  url: '/home/removeRequiredSkills', 
+					  data: {'id' : val, 'jobID' : jobIDVal},
+					  success: function(data) 
+					  {
+							skillname	=	data.skillname
+							$('.'+skillid).remove();
+							if( !$.trim( $('#skill').html() ).length ) 
+							{
+								$("#tabl").hide();
+								$("#btn").hide();
+							}	
+							
+					  } 
+				  });
+		}
+	}
+</script>
+
+<script>
+	function validateDesOrPri(val)		  
+		{	
+			var jobID 		 	 = 		document.getElementById("jobID");
+			var jobIDVal 		 = 		jobID.value;
+			var value = $("#drp_"+val).val()
+			$.ajax({ 
+					  type: 'GET', 
+					  url: '/home/desiredOrRequired', 
+					  data: {'id' : value, 'skill' : val, 'jobID' : jobIDVal},
+					  success: function(data) 
+					  {
+					  } 
+				  });
+		}
+</script>
+
+<script>
+	function validatePrior(value)		  
+		{	
+			var jobID 		 	 = 		document.getElementById("jobID");
+			var jobIDVal 		 = 		jobID.value;
+			var reg = /^\d+$/;
+			var priority 		 = 		document.getElementById("prior_"+value);
+			var priorityVal		 = 		priority.value;
+			if(priorityVal.match(reg))
+			{
+				if(priorityVal >0 && priorityVal < 11)
+				{
+					$.ajax({ 
+							  type: 'GET', 
+							  url: '/home/skillRatingPriorityVal', 
+							  data: {'priorityVal' : priorityVal, 'skill' : value, 'jobID' : jobIDVal},
+							  success: function(data) 
+							  {
+							  } 
+						  });
+				}
+				else
+				{
+					alert("Priority entered not between 1 to 10");
+					return false;
+				}
+			} 
+			else
+			{
+				alert("Please enter an integer value");
+				return false;
+			} 
+		}
+</script>	
+
+<script>
+	function validateRank(value)		  
+		{	
+			var jobID 		 	 = 		document.getElementById("jobID");
+			var jobIDVal 		 = 		jobID.value;
+			var reg = /^\d+$/;
+			var rank 		 	 = 		document.getElementById("rank_"+value);
+			var rankVal 		 = 		rank.value;
+			if(rankVal.match(reg))
+			{
+				if(rankVal >0 && rankVal < 11)
+				{
+					$.ajax({ 
+							  type: 'GET', 
+							  url: '/home/skillRatingRankVal', 
+							  data: {'rankVal' : rankVal, 'skill' : value, 'jobID' : jobIDVal},
+							  success: function(data) 
+							  {
+							  } 
+						  });
+				}
+				else
+				{
+					alert("Rank entered not between 1 to 10");
+					return false;
+				}
+			} 
+			else
+			{
+				alert("Please enter an integer value");
+				return false;
+			} 
+		}
+</script>	
+
+<script>
+	function validateForm()		  
+		{	
+			$(document).ready(function(){
+				
+				var jobID 		 	 = 		document.getElementById("jobID");
+				var jobIDVal 		 = 		jobID.value;
+				$.ajax({ 
+						type: 'GET', 
+						url: '/home/getSkillID', 
+						data: {'jobID' : jobIDVal},
+						success: function(data) 
+						{
+							skillname			=	data.skillID
+							var flag			= 	"true"
+							$.each(skillname ,function(i,v) {
+								var rankId 		 	 = 		document.getElementById('rank_'+skillname[i]+'');
+								var rankIdVal 		 = 		rankId.value.length;
+								var priorID 		 = 		document.getElementById('prior_'+skillname[i]+'');
+								var priorIDVal 		 = 		priorID.value.length;
+								if(rankIdVal == 0 || priorIDVal == 0)
+								{
+									flag			 = 	 	"false";
+								}
+								
+							});
+							if(flag == "false")
+							{
+								alert("sry");
+								return false
+							}
+							else
+							{
+								return true;
+							}
+						} 
+					  });
+			 });
+		}
+</script>
+<div class = "textfont">
+	<input type="hidden" value="<%= @jobID %>"  name="prospect">
+	<input type = "hidden" name = "jobIDVal" id = "jobID" value = <%= @jobID %> >
+	<table align ="center" class ="serifa" >
+		 <tr>
+			<td class="serifa">Title</td><td><input type="text" style="height:25px;font-size:10pt;" size=80"  value="<%= @jobName %>" name="title" id="title"> </td>
+		 </tr>
+	</table>
+	<div class="outer_container">
+		<div class = "textfont" style="width:53%;float:left;">
+			<div style="width:100%;">
+				<table  width="500px">
+				
+					<input type = "hidden" name = "jobIDVal" id = "jobID" value = <%= @jobID %> >
+						
+					<tr>
+						<td width="200px">
+							please select your category
+						</td>
+						<td width="300px">
+						
+							<%= select_tag "sel_group", options_for_select(@skill) ,{:class => "drop"} %>
+						</td>
+					</tr>
+					<tr>
+						<td width="200px">
+							please select your Specialty
+						</td>
+						<td width="300px">
+						
+							<%= select_tag "sel_group1", options_for_select(@subskill), {:id => "secDrop" , :class => "drops"} %>
+						</td>
+					</tr>		
+				</table>
+			</div>
+			<div style="width:100%;">
+					<span id ="txt"></span>
+					<div class="my" style="align:center; width:60%;"></div>
+			</div>		
+		</div>
+		
+		<div  STYLE="margin-left: 53%">
+			<table>
+				<tr  bgcolor="#edf2f4"><td width = 41%>Skill</td><td>Proficency</td><td>Importance</td> <td>Required</td></tr>
+				<% unless(@cnt_ary.nil?)%>
+					<% @cnt_ary.each do |value| %>
+						<tr>
+							<td><%= value['skillName'].to_s  %></td>
+							<td><input type ="text" value ="<%= value['skillProf']  %>" size="5" id="rank_<%= value['skillID'].to_s  %>" onblur="validateRank('<%= value['skillID'].to_s  %>')" ></td>
+							<td><input type ="text" value ="<%= value['skillImp']  %>" size="5" id="prior_<%= value['skillID'].to_s  %>" onblur="validatePrior('<%= value['skillID'].to_s  %>')" ></td>
+							<td><select id="drp_<%= value['skillID'].to_s  %>" onchange="validateDesOrPri('<%= value['skillID'].to_s  %>')" > <option value="1" <% if(value['required'].to_s == "YES") %> selected <% end %> >YES</option><option value="0" <% if(value['required'].to_s == "NO") %> selected <% end %> >NO</option></select></td>
+						</tr>
+					<% end %>
+				<% end %>
+				<tr>
+					<td>
+						<div id ="skillName">
+						</div>
+					</td>
+					<td>
+						<div id ="skillProf">
+						</div>
+					</td>
+					<td>
+						<div id ="skillImp">
+						</div>
+					</td>
+					<td>
+						<div id ="skillReq">
+						</div>
+					</td>
+				</tr>		
+			</table>			
+		</div>	
+	</div>
+</div>
