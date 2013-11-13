@@ -1476,12 +1476,73 @@ class HomeController < ApplicationController
 														@proficency	=	nil
 														@Impotance	=	nil
 												   end	
-								end				   			   
+								end	
 								
-								@rate.each do |value|
-												@totalSkillScore	=	@totalSkillScore	 + (value['employerProf'].to_i * value['employerImp'].to_i)
-												@totalEmployeeScore	=	@totalEmployeeScore  + (value['prof'].to_i * value['employerImp'].to_i)
-										   end	
+														@rate.each do |value|
+																		if((value['prof'].to_i == 1) && (value['employerProf'].to_i == 1))
+																			@gaf		=	1
+																		elsif((value['prof'].to_i == 1) && (value['employerProf'].to_i == 2))	
+																			@gaf		=	1.05
+																		elsif((value['prof'].to_i == 1) && (value['employerProf'].to_i == 3))
+																			@gaf		=	1.1
+																		elsif((value['prof'].to_i == 1) && (value['employerProf'].to_i == 4))
+																			@gaf		=	1.15
+																		elsif((value['prof'].to_i == 1) && (value['employerProf'].to_i == 5))
+																			@gaf		=	1.2
+																		elsif((value['prof'].to_i == 2) && (value['employerProf'].to_i == 1))
+																			@gaf		=	1.05
+																		elsif((value['prof'].to_i == 2) && (value['employerProf'].to_i == 2))
+																			@gaf		=	1
+																		elsif((value['prof'].to_i == 2) && (value['employerProf'].to_i == 3))
+																			@gaf		=	1.05
+																		elsif((value['prof'].to_i == 2) && (value['employerProf'].to_i == 4))
+																			@gaf		=	1.1
+																		elsif((value['prof'].to_i == 2) && (value['employerProf'].to_i == 5))
+																			@gaf		=	1.15
+																		elsif((value['prof'].to_i == 3) && (value['employerProf'].to_i == 1))
+																			@gaf		=	1.1
+																		elsif((value['prof'].to_i == 3) && (value['employerProf'].to_i == 2))
+																			@gaf		=	1.05
+																		elsif((value['prof'].to_i == 3) && (value['employerProf'].to_i == 3))
+																			@gaf		=	1
+																		elsif((value['prof'].to_i == 3) && (value['employerProf'].to_i == 4))
+																			@gaf		=	1.05
+																		elsif((value['prof'].to_i == 3) && (value['employerProf'].to_i == 5))
+																			@gaf		=	1.1
+																		elsif((value['prof'].to_i == 4) && (value['employerProf'].to_i == 1))
+																			@gaf		=	1.15
+																		elsif((value['prof'].to_i == 4) && (value['employerProf'].to_i == 2))
+																			@gaf		=	1.1
+																		elsif((value['prof'].to_i == 4) && (value['employerProf'].to_i == 3))
+																			@gaf		=	1.05
+																		elsif((value['prof'].to_i == 4) && (value['employerProf'].to_i == 4))
+																			@gaf		=	1
+																		elsif((value['prof'].to_i == 4) && (value['employerProf'].to_i == 5))
+																			@gaf		=	1.05
+																		elsif((value['prof'].to_i == 5) && (value['employerProf'].to_i == 1))
+																			@gaf		=	1.2
+																		elsif((value['prof'].to_i == 5) && (value['employerProf'].to_i == 2))
+																			@gaf		=	1.15
+																		elsif((value['prof'].to_i == 5) && (value['employerProf'].to_i == 3))
+																			@gaf		=	1.1
+																		elsif((value['prof'].to_i == 5) && (value['employerProf'].to_i == 4))
+																			@gaf		=	1.05
+																		elsif((value['prof'].to_i == 5) && (value['employerProf'].to_i == 5))
+																			@gaf		=	1
+																		else
+																			@gaf		=	1	
+																		end	
+																		if(value['prof'].to_i >0)
+																			absl	= (value['prof'].to_i - value['employerProf'].to_i).abs
+																			@totalEmployeeScore	=	@totalEmployeeScore + (((value['employerProf'].to_i - absl)*value['employerImp'].to_i)/@gaf)
+																			totalSkillScore	=	@totalSkillScore	 + (value['employerProf'].to_i * value['employerImp'].to_i)
+																		else
+																			@totalEmployeeScore	=	@totalEmployeeScore + 0
+																			totalSkillScore	=	@totalSkillScore	 + (value['employerProf'].to_i * value['employerImp'].to_i)
+																		end	
+																   end												   			   
+								
+									
 								name					=		Prospect.find_by_id(val)					
 								@cnt_ary.push("candidateName" => 'Candidate' + ' ' +  @candidateCnt.to_s, "appliedFor" => @count, "candidateID" => val, "check" => 0 , "jobSkillScore" => @totalSkillScore  , "employeeSkillScore" => @totalEmployeeScore)
 								
@@ -1593,10 +1654,69 @@ class HomeController < ApplicationController
 												   end	
 								end				   			   
 								
-								@rate.each do |value|
-												@totalSkillScore	=	@totalSkillScore	 + (value['employerProf'].to_i * value['employerImp'].to_i)
-												@totalEmployeeScore	=	@totalEmployeeScore  + (value['prof'].to_i * value['employerImp'].to_i)
-										   end	
+														@rate.each do |value|
+																		if((value['prof'].to_i == 1) && (value['employerProf'].to_i == 1))
+																			@gaf		=	1
+																		elsif((value['prof'].to_i == 1) && (value['employerProf'].to_i == 2))	
+																			@gaf		=	1.05
+																		elsif((value['prof'].to_i == 1) && (value['employerProf'].to_i == 3))
+																			@gaf		=	1.1
+																		elsif((value['prof'].to_i == 1) && (value['employerProf'].to_i == 4))
+																			@gaf		=	1.15
+																		elsif((value['prof'].to_i == 1) && (value['employerProf'].to_i == 5))
+																			@gaf		=	1.2
+																		elsif((value['prof'].to_i == 2) && (value['employerProf'].to_i == 1))
+																			@gaf		=	1.05
+																		elsif((value['prof'].to_i == 2) && (value['employerProf'].to_i == 2))
+																			@gaf		=	1
+																		elsif((value['prof'].to_i == 2) && (value['employerProf'].to_i == 3))
+																			@gaf		=	1.05
+																		elsif((value['prof'].to_i == 2) && (value['employerProf'].to_i == 4))
+																			@gaf		=	1.1
+																		elsif((value['prof'].to_i == 2) && (value['employerProf'].to_i == 5))
+																			@gaf		=	1.15
+																		elsif((value['prof'].to_i == 3) && (value['employerProf'].to_i == 1))
+																			@gaf		=	1.1
+																		elsif((value['prof'].to_i == 3) && (value['employerProf'].to_i == 2))
+																			@gaf		=	1.05
+																		elsif((value['prof'].to_i == 3) && (value['employerProf'].to_i == 3))
+																			@gaf		=	1
+																		elsif((value['prof'].to_i == 3) && (value['employerProf'].to_i == 4))
+																			@gaf		=	1.05
+																		elsif((value['prof'].to_i == 3) && (value['employerProf'].to_i == 5))
+																			@gaf		=	1.1
+																		elsif((value['prof'].to_i == 4) && (value['employerProf'].to_i == 1))
+																			@gaf		=	1.15
+																		elsif((value['prof'].to_i == 4) && (value['employerProf'].to_i == 2))
+																			@gaf		=	1.1
+																		elsif((value['prof'].to_i == 4) && (value['employerProf'].to_i == 3))
+																			@gaf		=	1.05
+																		elsif((value['prof'].to_i == 4) && (value['employerProf'].to_i == 4))
+																			@gaf		=	1
+																		elsif((value['prof'].to_i == 4) && (value['employerProf'].to_i == 5))
+																			@gaf		=	1.05
+																		elsif((value['prof'].to_i == 5) && (value['employerProf'].to_i == 1))
+																			@gaf		=	1.2
+																		elsif((value['prof'].to_i == 5) && (value['employerProf'].to_i == 2))
+																			@gaf		=	1.15
+																		elsif((value['prof'].to_i == 5) && (value['employerProf'].to_i == 3))
+																			@gaf		=	1.1
+																		elsif((value['prof'].to_i == 5) && (value['employerProf'].to_i == 4))
+																			@gaf		=	1.05
+																		elsif((value['prof'].to_i == 5) && (value['employerProf'].to_i == 5))
+																			@gaf		=	1
+																		else
+																			@gaf		=	1	
+																		end	
+																		if(value['prof'].to_i >0)
+																			absl	= (value['prof'].to_i - value['employerProf'].to_i).abs
+																			@totalEmployeeScore	=	@totalEmployeeScore + (((value['employerProf'].to_i - absl)*value['employerImp'].to_i)/@gaf)
+																			@totalSkillScore	=	@totalSkillScore	 + (value['employerProf'].to_i * value['employerImp'].to_i)
+																		else
+																			@totalEmployeeScore	=	@totalEmployeeScore + 0
+																			@totalSkillScore	=	@totalSkillScore	 + (value['employerProf'].to_i * value['employerImp'].to_i)
+																		end	
+																   end		
 								name					=		Prospect.find_by_id(val)					
 								@cnt_ary.push("candidateName" => 'Candidate' + ' ' +  @candidateCnt.to_s, "appliedFor" => @count, "candidateID" => val, "check" => 1 , "jobSkillScore" => @totalSkillScore  , "employeeSkillScore" => @totalEmployeeScore)
 								
