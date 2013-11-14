@@ -203,8 +203,8 @@ class HomeController < ApplicationController
 				if(hiring.save == true)
 					hir 								= 		Hiringauthority.sort(:created_at.desc).all
 					hiringid							=		hir[0].id
-					employ  							= 		Jobposting.new(:jobid => jobCategory , :jobtype => jobType , :details => details , :postingcompany => postingcompany , :hiringauthority => hiringid, :description => title, :dateopen => opdate, :dateclose => cldate, :numpositions => openings, :salary => salary, :address => address, :city => city, :state => state, :zip => zip, :reviewer => reviewer, :manager => manager, :hrmanager => hrmanager)
-					if(employ.save == true)
+					employ  							= 		Jobposting.create(:jobid => jobCategory , :jobtype => jobType , :details => details , :postingcompany => postingcompany , :hiringauthority => hiringid, :description => title, :dateopen => opdate, :dateclose => cldate, :numpositions => openings, :salary => salary, :address => address, :city => city, :state => state, :zip => zip, :reviewer => reviewer, :manager => manager, :hrmanager => hrmanager)
+					if(employ)
 						@msg     						= 		"successfully inserted"
 						redirect_to :action 			=>		"jobPostingNew" , :jobID => employ.id
 					end
