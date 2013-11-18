@@ -1692,16 +1692,12 @@ require 'json'
 				data										=		Jobposting.find_by_id(jobID.to_s)
 				unless(data.nil?)
 					unless(describe.nil?)
-						cntins  							= 		Rating.new(:jobseekerid => session[:userid].to_s, :rating => describe.to_s)
-						data.rating.push(cntins)
-						data.save
+					data.update_attributes(:rating => [Rating.new(:jobseekerid => session[:userid].to_s, :rating => describe.to_s)])
 					
-						if(cntins.save == true)
 							Jobposting.push({:id => jobID}, :jobSeeker => session[:userid].to_s)
 							Prospect.push({:id => session[:userid].to_s}, :jobsapplied => jobID)
 							@text					=	"1"
 							render :json => @text
-						end 
 					end
 				end	
 			end	
