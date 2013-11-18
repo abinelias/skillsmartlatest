@@ -1669,8 +1669,8 @@ require 'json'
 				data										=		Jobposting.find_by_id(jobID)
 				unless(data.nil?)
 					unless(describe.nil?)
-								
-						data.Rating.new(:jobseekerid => session[:userid].to_s, :rating => describe.to_s)
+						cntins  							= 		Rating.new(:jobseekerid => session[:userid].to_s, :rating => describe.to_s)
+						data.rating << cntins
 						data.save
 					
 						if(cntins.save == true)
@@ -1693,7 +1693,7 @@ require 'json'
 				unless(data.nil?)
 					unless(describe.nil?)
 						cntins  							= 		Rating.new(:jobseekerid => session[:userid].to_s, :rating => describe.to_s)
-						data.rating << cntins
+						data.rating.push(cntins)
 						data.save
 					
 						if(cntins.save == true)
