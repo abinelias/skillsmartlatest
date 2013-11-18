@@ -1663,8 +1663,8 @@ require 'json'
 	def popupApplyJob
 		@jobID												=		params[:jobID]
 		unless(params[:jobIDVal].nil?)
-			jobID											=		params[:jobIDVal]
-			describe 			  							= 		params[:desc]
+			jobID											=		"5230850af1bb551834015059"
+			describe 			  							= 		"I am perfect"
 			unless(jobID.nil?)
 				data										=		Jobposting.find_by_id(jobID)
 				unless(data.nil?)
