@@ -613,6 +613,42 @@ require 'json'
 		render :layout => false	 
 	end
 	
+	def popupForSkill
+		@skill				               				= 		Hash.new
+		@subskill				               			= 		Hash.new
+		@thirdSkill				               			= 		Hash.new
+		@skill["Select Category"]						=		""
+		@subskill["Select Speciality"]					=		""		
+		Skill.where(:parentid => "0").all.each do |value|
+													@skill[value.name] 				= 		value.id
+												end
+	end
+	
+	def addSkillNew
+		@skillDetails					=		Array.new
+		info							=		Portfolio.find_by_ownerid(session[:userid].to_s)
+		information						=		info.id	
+		unless(information.nil?)
+			Portfolioitem.where(:portfolioid =>information.to_s).all.each do |valu|
+					portId				=		valu.id
+					skill				=		Portfolioitemskill.find_by_portfolioitemid(portId.to_s)
+					skillID				=		skill.skillid
+					skillInfo			=		Skill.find_by_id(skillID.to_s)
+					skillName			=		skillInfo.name
+					skillParent			=		skillInfo.parentid
+					
+					specialityInfo		=		Skill.find_by_id(skillParent.to_s)
+					specialityName		=		specialityInfo.name
+					speciality			=		specialityInfo.parentid
+					
+					categoryInfo		=		Skill.find_by_id(speciality.to_s)
+					categoryName		=		categoryInfo.name
+	  
+					@skillDetails.push("categoryName" => categoryName, "specialityName" => specialityName, "skillName" => skillName)
+				end
+		end	
+	end	
+		
 	def portfolioNew
 		@dataARY      							= 		Array.new	
 		@cntArray      							= 		Array.new
@@ -683,7 +719,7 @@ require 'json'
 									@prof	=	5		
 							end	
 									  
-							@skillDetails.push("categoryName" => categoryName, "specialityName" => specialityName, "skillName" => skillName , "skillProficency" => @prof , "skillID" => skillID)
+							@skillDetails.push("categoryName" => categoryName, "specialityName" => specialityName, "skillName" => skillName , "skillProficency" => @prof , "skillID" => skillID, "portfolioitemskillId" => skill.id)
 						end
 				end	
 			end	
@@ -698,6 +734,62 @@ require 'json'
 			skillInfo											=		Skill.find_by_id(params[:skillID].to_s)
 			@skillName											=		skillInfo.name
         end
+	end
+	
+	def editskill
+		@dataAry							=		Array.new
+		@certi								=		Array.new
+		@exampl								=		Array.new
+		@refer								=		Array.new
+		
+		unless(params[:portId].to_s.nil?)
+			Portfolioitemskill.where(:id => params[:portId].to_s).each do |value|
+				@skillID					=		value.skillid
+				unless(@skillID.to_s.nil?)
+					skillInfo	=	Skill.find_by_id(@skillID.to_s)
+					unless(skillInfo.to_s.nil?)
+						skillName			=		skillInfo.name
+						skillParent			=		skillInfo.parentid
+						
+						specialityInfo		=		Skill.find_by_id(skillParent.to_s)
+						specialityName		=		specialityInfo.name
+						speciality			=		specialityInfo.parentid
+						
+						categoryInfo		=		Skill.find_by_id(speciality.to_s).name
+						@dataAry.push("skillname" => skillName , "portfolioskillid" => params[:portId].to_s , "speciality" => specialityName, "category" => categoryInfo)
+						
+						 @empVaule	=	value.value
+						 unless(@empVaule.blank?)
+							@empVaule.each do |vale|
+											   @certificates		=		vale.certificate
+											   @references			=		vale.reference
+											   @examples			=		vale.example
+											   
+											   @prof				=		vale.proficency
+											   @exp					=		vale.experience
+											   unless(@certificates.nil?)
+												   @certificates.each do |vle|
+																		  @certi.push("certificate" => vle.certname , "description" => vle.certdescription)
+																	  end
+											   end
+											   unless(@examples.nil?)
+												   @examples.each do |vle|
+																		  @exampl.push("example" => vle.examplename , "description" => vle.exampledescription)
+																	  end
+											   end
+											   unless(@references.nil?)
+												   @references.each do |vle|
+																		  @refer.push("reference" => vle.refname , "description" => vle.refdescription)
+																	  end
+											   end
+											   
+											end   				   
+											
+						end
+					end
+				 end
+			 end
+		end
 	end
 	
 	def myskillsPortfolio
@@ -743,11 +835,11 @@ require 'json'
 	end
 	
 	def changeProficency
-		unless($portify.nil?)
-			unless($portify.blank?)
+		unless(params[:id].to_s.nil?)
+			unless(params[:id].to_s.blank?)
 				proficency													=		params[:proficency]
 				unless(proficency.blank?)
-					emp_data  												= 		Portfolioitemskill.find_by_id($portify)
+					emp_data  												= 		Portfolioitemskill.find_by_id(params[:id].to_s)
 					unless(emp_data.nil?)
 						values 												= 		emp_data.value
 						if(values.blank?)
@@ -778,11 +870,11 @@ require 'json'
 	end	
 	
 	def changeExperience
-		unless($portify.nil?)
-			unless($portify.blank?)
+		unless(params[:id].to_s.nil?)
+			unless(params[:id].to_s.blank?)
 				experience													=		params[:experience]
 				unless(experience.blank?)
-					emp_data  												= 		Portfolioitemskill.find_by_id($portify)
+					emp_data  												= 		Portfolioitemskill.find_by_id(params[:id].to_s)
 					unless(emp_data.nil?)
 						values 												= 		emp_data.value
 						if(values.blank?)
@@ -971,6 +1063,7 @@ require 'json'
 	end
 	
 	def myCertificates
+		@id			=		params[:portId].to_s
 	end
 	
 	def myCert
@@ -1042,6 +1135,7 @@ require 'json'
 	end
 
 	def myExamples
+		@id			=		params[:portId].to_s
 	end
 	
 	def myEg
@@ -1114,6 +1208,7 @@ require 'json'
 	end
 	
 	def myReferences
+		@id			=		params[:portId].to_s
 	end
 	
 	def myRefer

@@ -2,7 +2,7 @@
 	<% unless(@skillDetails.nil?)%>	
 		<table>
 			<tr>
-				<td><p><div class = "textfont"><span style="width:80px;float:left;">Click on the</span><div style="width:50px;float:left;"><%= link_to "Add", {:controller => 'employee', :action => 'addMyskillsPortfolio'} %></div><span style="width:520px;float:left;"> button to add your skills</span></div></p></td>
+				<td><p><div class = "textfont"><span style="width:80px;float:left;">Click on the</span><div style="width:50px;float:left;"><%= link_to "Add", {:controller => 'employee', :action => 'addSkillNew'} %></div><span style="width:520px;float:left;"> button to add your skills</span></div></p></td>
 			</tr>
 			<tr>	
 				<td>
@@ -22,13 +22,13 @@
 									<td width ="100"><%= value['specialityName'].to_s %></td>
 									<td width ="100" align ="left"><%= link_to value['skillName']  , url_for({:controller => 'employee', :action => 'skillvalidate' , :skillID => value['skillID'].to_s}) , {:class => "textfont"} %></td>
 									<td align ="center" width ="100"><%= value['skillProficency'].to_s %></td>
-									<td><%= link_to 'Edit'  , url_for({:controller => 'employee', :action => 'myskillsPortfolio'  }) %> </td>	   
+									<td><%= link_to 'Edit'  , url_for({:controller => 'employee', :action => 'editskill' , :portId => value['portfolioitemskillId'].to_s }) %> </td>	   
 
 								</tr>
 							<% end %>
 							<tr>
 								<td>
-									<%= link_to "Add Skill"  , url_for({:controller => 'employee', :action => 'addMyskillsPortfolio'}), {:class => "link"} %>
+									<%= link_to "Add Skill"  , url_for({:controller => 'employee', :action => 'addSkillNew'}), {:class => "link"} %>
 								</td>
 							</tr>	
 						</table>

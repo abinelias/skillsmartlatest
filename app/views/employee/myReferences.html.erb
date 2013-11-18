@@ -39,28 +39,13 @@
 				  var id 	 			 = 		id.value;
 				  $.ajax({ 
 						  type: 'GET', 
-						  url: '/employee/myRefer', 
+						  url: '/jobseeker/myRefer', 
 						  data: {'reference' : skills, 'description':descriptions, 'id':id},
 						  success: function(data) 
 							{
-								    reference = data.reference
-								    description = data.description
-														  
-									var dta = window.opener.$("#ref");
-									$(dta).append($('<tr>'));
-									$(dta).append($('<td width ="300">').append(reference));
-									$(dta).append($('</td>'));
-									$(dta).append($('<td><%= link_to 'Delete' %></td>'));
-									$(dta).append($('</tr>'));
-									$(dta).append($('<tr>'));
-									$(dta).append($('<td width ="300">'));
-									$(dta).append(description);
-									$(dta).append($('</td>'));
-									$(dta).append($('</tr>'));
-									$(dta).append($('<tr>'));
-									$(dta).append($('<td>&nbsp</td>'));
-									$(dta).append($('</tr>'));
-									self.close();
+								   
+								self.close();
+								opener.location.reload(true);
 							} 
 						});				
 			}
