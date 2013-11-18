@@ -135,6 +135,9 @@ Employee::Application.routes.draw do
 	match "/jobseeker/editWorkHistory"			=>		"employee#editWorkHistory" 
 	match "/jobseeker/updateWorkHistory"		=>		"employee#updateWorkHistory"
 	match "/jobseeker/skillvalidate"			=>		"employee#skillvalidate"	
+	match "/jobseeker/editskill"				=>		"employee#editskill"	
+	match "/jobseeker/addSkillNew"				=>		"employee#addSkillNew"
+	match "/jobseeker/popupForSkill"			=>		"employee#popupForSkill"
 	
 	  
   # The priority is based upon order of creation:
