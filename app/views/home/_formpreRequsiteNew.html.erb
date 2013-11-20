@@ -1,146 +1,37 @@
-<style>
-	table.serifa{font-family:Arial,Helvetica,sans-serif;}
-</style>
-
-<style>
-	
-	.outer_container
-	{
-		margin:10px;
-	}
-	
-	.preDrop { width:250px; }
-	.subPredrops { width:250px; }
-</style>
-
 <script>
 	$(document).ready(function(){
-	    $("#pretabl").hide();
-	    $("#prebtn").hide();
-	    $('#pretabl').append($('<table  border =0 cellpadding="5"><tr  bgcolor="#edf2f4"><td width = 46%>Prerequisites</td><td width = 35%>Requirement</td></tr>'));
+		$("#butn").hide();
 	});	
 </script>
 
-<script>
-	$(document).ready(function(){
-		$("#mydiv").hide();
-		$('.preDrop').change(function() 
-		{
-			$.ajax({ 
-				  type: 'GET', 
-				  url: '/home/popSecondPre', 
-				  data: {'id' : $('.preDrop').val()},
-				  success: function(data) 
-				  {
-						   $('#presecDrop').empty();
-						   $('#presecDrop').append( $('<option value= "">Select Specialty</option>'));						   
-						   $.each(data,function(i, v) {
-						   $('#presecDrop').append( $('<option value="'+ data[i][0] +'">'+data[i][1] +'</option>'));
-						 });
-				  } 
-			  });
-		});
-	});	
-</script>
-
-<script>
-	$(document).ready(function(){
-
-		$('.subPredrops').change(function() 
-		{
-			$.ajax({ 
-				  type: 'GET', 
-				  url: '/home/PopThirdPre', 
-				  data: {'id' : $('.subPredrops').val()},
-				  success: function(data) 
-				  {
-						   $('#preTxt').empty();	
-						   $('#preTxt').append('click checkbox to add Prerequsites');
-						   $('.thirdPre').empty();
-						   $.each(data,function(i, v) {
-						   $('.thirdPre').append( $('<div><span>-</span><input id="prechk_'+data[i][0]+'" type="checkbox" onchange="validatepre(\''+data[i][0]+'\')" name="prerequsite" class = "preboox" value="'+ data[i][0] +'" /><span >'+data[i][1] +'</span></div>'));
-						  
-						 });
-				  } 
-			  });
-		});
-	});	
-</script>
-
-<script>
-	function validatepre(val)		  
-	{	
-		var jobID 		 	 = 		document.getElementById("jobID");
-		var jobIDVal 		 = 		jobID.value;
-		$("#prerequsite").show();
-		$("#pretabl").show();
-		$("#prebtn").show();
-		var prechkId		 =		"#prechk_"+val
-		if($(prechkId).is(':checked'))
-		{
-			$.ajax({ 
-					  type: 'GET', 
-					  url: '/home/addPrequisite', 
-					  data: {'id' : val, 'jobID' : jobIDVal},
-					  success: function(data) 
-					  {
-							prename		=	data.prename
-							preid		=	data.preid
-							$('#prerequsite').append($('<div class="'+preid+'"><td><input type ="text" size="18%" value ="'+prename+'" disabled></td><td><select id="drp_'+val+'" ><option value="0">Required</option><option value="1">Prefered</option><option value="2">Acceptable</option></select></td></div>'));
-					  } 
-				  });
-		}
-		
-	}
-</script>
-
+<input type = "hidden" name = "jobIDVal" id = "jobID" value = <%= @jobID %> >
 <div class = "textfont" >
-	
-	<table align ="center" class ="serifa" >
+	<table align ="center">
 		 <tr>
-			<td class="serifa">Title</td><td><input type="text" style="height:25px;font-size:10pt;" size=80"  value="<%= @jobName %>" name="title" id="title"> </td>
+			<td>Title</td><td><input type="text" style="height:25px;font-size:10pt;" size=80" value="<%= @jobName %>" name="title" id="title"> </td>
 		 </tr>
 	</table>
+	<table>
+		<tr>
+			<td><p><div class = "textfont"><span style="width:80px;float:left;">Click on the</span><div style="width:50px;float:left;"> <%= link_to "Add", {:controller => "home", :action => "popupForPrerequisite" , :id => @jobID.to_s},  :onclick=>"window.open(this.href,'myEducationPopup', 'scrollbars=yes,height=450,width=530,top=250,left=600' ); return false;" %></div><span style="width:55%;float:left;"> button to add job prerequisites</span></div></p></td>
+		</tr>
+		<tr  bgcolor="#edf2f4">
+			<td width = 77%>Prerequisites</td>
+			<td>Requirement</td>
+		</tr>
+	</table>
 	
-	<div>	
-		<table width="100%">
-			<tr valign="top">
-				<td width="58%">
-					<div class = "textfont">
-						<input type = "hidden" name = "jobIDVal" id = "jobID" value = <%= @jobID %> >
-						<div>
-							<table>
-								<tr>
-									<td width="200px">please select your category</td>
-									<td width="300px">
-										<%= select_tag "sel_group", options_for_select(@prerequsite) ,{:class => "preDrop"} %>
-									</td>
-								</tr>
-								<tr>
-									<td width="200px">please select your Specialty</td>
-									<td width="300px">
-										<%= select_tag "sel_group1", options_for_select(@subprerequsite), {:id => "presecDrop" , :class => "subPredrops"} %>
-									</td>
-								</tr>		
-							</table>
-						</div>	
-						<div>
-							<span id ="preTxt"></span>
-							<div class="thirdPre" style="align:center;"></div>
-						</div>		
-					</div>
-				</td>
-				<td width="42%">
-					<div id = "jquer">
-						<div id ="pretabl"></div>
-						<div id ="prerequsite"></div>
-						<div id ="prebtn">
-							<input type="submit" name="add" value="Submit"  id="add">
-						</div>
-					</div>	
+	<div id ="preName">
+	</div>
+	
+	<div id ="butn">
+		<table>
+			<tr>
+				<td>
+					<input type="submit" name="add" value="Submit"  id="add">
 				</td>
 			</tr>
-		</table>
+		</table>	
 	</div>
 </div>
 				

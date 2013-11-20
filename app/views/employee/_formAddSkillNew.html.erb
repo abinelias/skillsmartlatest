@@ -2,7 +2,7 @@
 	<% unless(@skillDetails.nil?)%>	
 		<table>
 			<tr>
-				<td><p><div class = "textfont">Click on the <%= link_to "Add", {:controller => "employee", :action => "popupForSkill"},  :onclick=>"window.open(this.href,'myEducationPopup', 'height=450,width=530,top=250,left=600' ); return false;" %> button to add your Educational Details</div></p></td>
+				<td><p><div class = "textfont"><span style="width:80px;float:left;">Click on the</span><div style="width:50px;float:left;"> <%= link_to "Add", {:controller => "employee", :action => "popupForSkill"},  :onclick=>"window.open(this.href,'myEducationPopup', 'scrollbars=yes,height=450,width=530,top=250,left=600' ); return false;" %></div><span style="width:55%;float:left;"> button to add your skills</span></div></p></td>
 			</tr>
 			<tr>	
 				<td>

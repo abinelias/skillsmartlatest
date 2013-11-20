@@ -63,7 +63,10 @@ Employee::Application.routes.draw do
 	match "/home/signout"						=>		"home#signout"
 	match "/home/csv_method"					=>		"home#csv_method"
 	match "/home/demo"							=>		"home#demo"	
-	match "/home/login"							=>		"home#login"
+	match "/home/login"							=>		"home#login" 
+	match "/home/popupForSkill"					=>		"home#popupForSkill"
+	match "/home/popupForPrerequisite"			=>		"home#popupForPrerequisite"
+	
 	
 	
 	match "/jobseeker/courseDetails"			=>		"employee#courseDetails"	

@@ -102,8 +102,32 @@ class HomeController < ApplicationController
 		end
 	end
 	
+	def popupForSkill
+		@skill				               				= 		Hash.new
+		@subskill				               			= 		Hash.new
+		@thirdSkill				               			= 		Hash.new
+		@skill["Select Category"]						=		""
+		@subskill["Select Speciality"]					=		""		
+		Skill.where(:parentid => "0").all.each do |value|
+													@skill[value.name] 				= 		value.id
+												end
+		@id												=		params[:id].to_s										
+	end
+	
+	def popupForPrerequisite
+		@prerequsite		               				= 		Hash.new
+		@subprerequsite			               			= 		Hash.new
+		@thirdprerequsite		               			= 		Hash.new
+		@prerequsite["Select Category"]					=		""
+		@subprerequsite["Select Specialty"]				=		""		
+		Prequisite.where(:parentid => "0").all.each do |value|
+													   @prerequsite[value.name] 				= 		value.id
+												   end
+		@id												=		params[:id].to_s										   
+	end											   
+	
 	def demo
-				postingcompany									=		session[:postingcompany]
+		postingcompany									=		session[:postingcompany]
 		@hiringAuthority               					= 		Hash.new
 		@jobCategory	               					= 		Hash.new
 		@hrManager	               						= 		Hash.new

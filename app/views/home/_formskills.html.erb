@@ -1,114 +1,7 @@
-<style>
-
-	
-	.outer_container
-	{
-		margin:10px;
-	}
-	
-	
-	.drop { width:250px; }
-	.drops { width:250px; }
-</style>
-
 <script>
 	$(document).ready(function(){
-	    $("#tabl").hide();
-	    $('#tabl').append($('<table  border =0 cellpadding="5"><tr  bgcolor="#edf2f4"><td width = 41%>Skill</td><td>Proficiency</td><td>Importance</td> <td>Required</td></tr>'));
-	});	
-</script>	
-
-<script>
-	$(document).ready(function(){
-		$("#mydiv").hide();
 		$("#btn").hide();
-		$('.drop').change(function() 
-		{
-			$.ajax({ 
-				  type: 'GET', 
-				  url: '/jobseeker/popSecond', 
-				  data: {'id' : $('.drop').val()},
-				  success: function(data) 
-				  {
-						   $('#secDrop').empty();
-						   $('#secDrop').append( $('<option value= "">Select Specialty</option>'));						   
-						   $.each(data,function(i, v) {
-						   $('#secDrop').append( $('<option value="'+ data[i][0] +'">'+data[i][1] +'</option>'));
-						 });
-				  } 
-			  });
-		});
 	});	
-</script>
-
-<script>
-	$(document).ready(function(){
-
-		$('.drops').change(function() 
-		{
-			$.ajax({ 
-				  type: 'GET', 
-				  url: '/jobseeker/PopThird', 
-				  data: {'id' : $('.drops').val()},
-				  success: function(data) 
-				  {
-						   $('#txt').empty();	
-						   $('#txt').append('click checkbox to add your Skill');
-						   $('.my').empty();
-						   $.each(data,function(i, v) {
-						   $('.my').append( $('<div><span>-</span><input id="chk_'+data[i][0]+'" type="checkbox" onchange="validate(\''+data[i][0]+'\')" name="skill" class = "boox" value="'+ data[i][0] +'" /><span >'+data[i][1] +'</span></div>'));
-						  
-						 });
-				  } 
-			  });
-		});
-	});	
-</script>
-
-<script>
-	function validate(val)		  
-	{	
-		var jobID 		 	 = 		document.getElementById("jobID");
-		var jobIDVal 		 = 		jobID.value;
-		$("#skill").show();
-		$("#tabl").show();
-		$("#btn").show();
-		var chkId="#chk_"+val
-		if($(chkId).is(':checked'))
-		{
-			$.ajax({ 
-					  type: 'GET', 
-					  url: '/home/addRequiredSkills', 
-					  data: {'id' : val, 'jobID' : jobIDVal},
-					  success: function(data) 
-					  {
-							skillname	=	data.skillname
-							skillid		=	data.skillid
-							$('#skill').append($('<div class="'+skillid+'"><tr><td><input type ="text" size="8%" value ="'+skillname+'" disabled></td><td><input type ="text" value ="" size="4%" id="rank_'+val+'" onblur="validateRank(\''+val+'\')" ></td><td><input type ="text" value ="" size="5%" id="prior_'+val+'" onblur="validatePrior(\''+val+'\')"></td><td><select id="drp_'+val+'" onchange="validateDesOrPri(\''+val+'\')" ><option value="1">YES</option><option value="0">NO</option></select></td></tr></div>'));
-							
-					  } 
-				  });
-		}
-		else
-		{
-			$.ajax({ 
-					  type: 'GET', 
-					  url: '/home/removeRequiredSkills', 
-					  data: {'id' : val, 'jobID' : jobIDVal},
-					  success: function(data) 
-					  {
-							skillname	=	data.skillname
-							$('.'+skillid).remove();
-							if( !$.trim( $('#skill').html() ).length ) 
-							{
-								$("#tabl").hide();
-								$("#btn").hide();
-							}	
-							
-					  } 
-				  });
-		}
-	}
 </script>
 
 <script>
@@ -198,47 +91,8 @@
 		}
 </script>	
 
-<script>
-	function validateForm()		  
-		{	
-			$(document).ready(function(){
-				
-				var jobID 		 	 = 		document.getElementById("jobID");
-				var jobIDVal 		 = 		jobID.value;
-				$.ajax({ 
-						type: 'GET', 
-						url: '/home/getSkillID', 
-						data: {'jobID' : jobIDVal},
-						success: function(data) 
-						{
-							skillname			=	data.skillID
-							var flag			= 	"true"
-							$.each(skillname ,function(i,v) {
-								var rankId 		 	 = 		document.getElementById('rank_'+skillname[i]+'');
-								var rankIdVal 		 = 		rankId.value.length;
-								var priorID 		 = 		document.getElementById('prior_'+skillname[i]+'');
-								var priorIDVal 		 = 		priorID.value.length;
-								if(rankIdVal == 0 || priorIDVal == 0)
-								{
-									flag			 = 	 	"false";
-								}
-								
-							});
-							if(flag == "false")
-							{
-								alert("sry");
-								return false
-							}
-							else
-							{
-								return true;
-							}
-						} 
-					  });
-			 });
-		}
-</script>
 
+<input type = "hidden" name = "jobIDVal" id = "jobID" value = <%= @jobID %> >
 <div class = "textfont">
 	<table align ="center">
 		 <tr>
@@ -246,50 +100,28 @@
 		 </tr>
 	</table>
 	
-	<div>	
-		<table width="100%">
-			<tr valign="top">
-				<td width="60%">
-					<div class = "textfont">
-						<input type = "hidden" name = "jobIDVal" id = "jobID" value = <%= @jobID %> >
-						<div>
-							<table>
-								<tr>
-									<td width="200px">
-										please select your category
-									</td>
-									<td width="300px">
-									
-										<%= select_tag "sel_group", options_for_select(@skill) ,{:class => "drop"} %>
-									</td>
-								</tr>
-								<tr>
-									<td width="200px">
-										please select your Specialty
-									</td>
-									<td width="300px">
-									
-										<%= select_tag "sel_group1", options_for_select(@subskill), {:id => "secDrop" , :class => "drops"} %>
-									</td>
-								</tr>		
-							</table>
-						</div>
-						<div style="width:100%;">
-								<span id ="txt"></span>
-								<div class="my" style="align:center; width:60%;"></div>
-						</div>		
-					</div>
-				</td>
-				<td width="40%">	
-					<div id = "jquer">
-						<div id ="tabl"></div>
-						<div id ="skill"></div>
-						<div id ="btn">
-							<input type="submit" name="add" value="Submit"  id="add">
-						</div>
-					</div>
+	<table>
+		<tr>
+			<td><p><div class = "textfont"><span style="width:80px;float:left;">Click on the</span><div style="width:50px;float:left;"> <%= link_to "Add", {:controller => "home", :action => "popupForSkill" , :id => @jobID.to_s},  :onclick=>"window.open(this.href,'myEducationPopup', 'scrollbars=yes,height=450,width=530,top=250,left=600' ); return false;" %></div><span style="width:55%;float:left;"> button to add job skills</span></div></p></td>
+		</tr>
+		<tr  bgcolor="#edf2f4">
+			<td width = "61%">Skill</td>
+			<td>Proficiency</td>
+			<td>Importance</td> 
+			<td>Required</td>
+		</tr>
+	</table>		
+
+	<div id ="skillName">
+	</div>
+	
+	<div id ="btn">
+		<table>
+			<tr>
+				<td>
+					<input type="submit" name="add" value="Submit"  id="add">
 				</td>
 			</tr>
-		</table>			
-	</div>	
+		</table	
+	</div>					
 </div>

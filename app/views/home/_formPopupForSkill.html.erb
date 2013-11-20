@@ -1,0 +1,147 @@
+<style>
+
+	.outer_container
+	{
+		margin:10px;
+	}
+	
+	#txtFld , select { width:200px; 		
+	    border: 1px solid #D1D3D5;
+	    border-radius: 2px 2px 2px 2px;
+	    color: #6A747C;
+	    font-family: 'Questrial', sans-serif;
+	    font-size: 15px;
+	    padding: 10px;
+	}
+	
+</style>
+
+
+<script>
+	$(document).ready(function(){
+		$('.drop').change(function() 
+		{
+			$.ajax({ 
+				  type: 'GET', 
+				  url: '/jobseeker/popSecond', 
+				  data: {'id' : $('.drop').val()},
+				  success: function(data) 
+				  {
+						   $('.drops').empty();
+						   $('.drops').append( $('<option value= "">Select Speciality</option>'));						   
+						   $.each(data,function(i, v) {
+						   $('.drops').append( $('<option value="'+ data[i][0] +'">'+data[i][1] +'</option>'));
+						 });
+				  } 
+			  });
+		});
+	});	
+</script>
+
+<script>
+	$(document).ready(function(){
+
+		$('.drops').change(function() 
+		{
+			$.ajax({ 
+				  type: 'GET', 
+				  url: '/jobseeker/PopThird', 
+				  data: {'id' : $('.drops').val()},
+				  success: function(data) 
+				  {
+						   $('#txt').empty();	
+						   $('#txt').append('click checkbox to add your Skill');
+						   $('.my').empty();
+						   $.each(data,function(i, v) {
+						   $('.my').append( $('<div><span>-</span><input id="chk_'+data[i][0]+'" type="checkbox" onchange="validate(\''+data[i][0]+'\')" name="skill" class = "boox" value="'+ data[i][0] +'" /><span >'+data[i][1] +'</span></div>'));
+						   
+						 });
+				  } 
+			  });
+		});
+	});	
+</script>
+
+
+
+
+<script>
+	function validate(val)		  
+	{	
+		var jobID 		 	 = 		document.getElementById("jobID");
+		var jobIDVal 		 = 		jobID.value;
+		var chkId="#chk_"+val
+		if($(chkId).is(':checked'))
+		{
+			$.ajax({ 
+					  type: 'GET', 
+					  url: '/home/addRequiredSkills', 
+					  data: {'id' : val, 'jobID' : jobIDVal},
+					  success: function(data) 
+					  {
+							var name = window.opener.$("#skillName");
+							var btn = window.opener.$("#btn");
+							
+							skillname	=	data.skillname
+							skillid		=	data.skillid
+							
+							$(name).append($('<table><tr><td width = "61%"><div class="'+skillid+'">'+skillname+'</div></td><td><div class="'+skillid+'"><input type ="text" value ="" size="5%" id="rank_'+val+'" onblur="validateRank(\''+val+'\')" ></div></td><td><div class="'+skillid+'"><input type ="text" value ="" size="5%" id="prior_'+val+'" onblur="validatePrior(\''+val+'\')"></div></td><td><div class="'+skillid+'"><select id="drp_'+val+'" onchange="validateDesOrPri(\''+val+'\')" ><option value="1">YES</option><option value="0">NO</option></select></div></td></tr></table>'));
+							$(btn).show();
+							self.close();
+					  } 
+				  });
+		}
+		else
+		{
+			$.ajax({ 
+					  type: 'GET', 
+					  url: '/home/removeRequiredSkills', 
+					  data: {'id' : val, 'jobID' : jobIDVal},
+					  success: function(data) 
+					  {
+							var name = window.opener.$('.'+skillid);
+							skillname	=	data.skillname
+							$(name).remove();
+							if( !$.trim( $('#skill').html() ).length ) 
+							{
+								$("#tabl").hide();
+								$("#btn").hide();
+							}	
+							
+					  } 
+				  });
+		}
+	}
+</script>
+
+<input type="hidden" value="<%= @id %>"  name="prospect">
+<input type = "hidden" name = "jobIDVal" id = "jobID" value = <%= @id %> >
+<div class="outer_container">
+	<div class = "textfont" style="width:38%;float:left;">
+		<div style="width:100%;">
+			<table  width="500px">
+				<tr>
+					<td width="200px">
+						please select your category
+					</td>
+					<td width="300px">
+						<%= select_tag "sel_group", options_for_select(@skill) ,{:class => "drop"} %>
+					</td>
+				</tr>
+				<tr>
+					<td width="200px">
+						please select your Speciality
+					</td>
+					<td width="300px">
+						<%= select_tag "sel_group1", options_for_select(@subskill), {:id => "secDrop" , :class => "drops"} %>
+					</td>
+				</tr>							
+			</table>
+		</div>
+		<div style="width:100%;">
+			<span id ="txt"></span>
+			<div class="my" style="align:center; width:138%;"></div>
+		</div>		
+	</div>
+</div>
+
