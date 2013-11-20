@@ -55,7 +55,7 @@
 					<tr>
 						<td align ="left" style="padding-left:20px;width:350px;" ><%= value['reqSkills'].to_s  %></td>
 						<td><%= value['skillVal'].to_s  %></td>
-						<td style="width:130px;" <% if(value['skillVal'].to_i > value['employeeVal'].to_i ) %> bgcolor="#00FF00"  
+						<td style="width:130px;" <% if(value['skillVal'].to_i >= value['employeeVal'].to_i ) %> bgcolor="#00FF00"  
 							<% else %>
 								<% if(value['skillVal'].to_i == (value['employeeVal'].to_i - 1 || value['employeeVal'].to_i - 2 )) %>
 									bgcolor="#FFFF00"
