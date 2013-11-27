@@ -55,11 +55,11 @@ function validateForm()
 				</tr>
 				<tr>
 					<td>Role</td> 
-					<td><%= select_tag "educatorRole", options_for_select(@roleArray) ,{:class => "downdownbox"}%> </td>
+					<td><%= select_tag "educatorRole", options_for_select(@roleArray ,@userRole) ,{:class => "downdownbox"}%> </td>
 				</tr>		
 				<tr>
 					<td>Permission</td> 
-					<td><%= select_tag "educatorPermission", options_for_select(@permissionArray) ,{:class => "downdownbox"}%> </td>
+					<td><%= select_tag "educatorPermission", options_for_select(@permissionArray ,@permission) ,{:class => "downdownbox"}%> </td>
 				</tr>				
 				<tr>
 					<td colspan="2">
