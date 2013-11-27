@@ -79,6 +79,7 @@ $(function()
 							<ul>
 								<li><a href="#tabs-1">Jobseeker Login</a></li>
 								<li><a href="#tabs-2">Employer Login</a></li>
+								<li><a href="#tabs-3">Educator Login</a></li>
 							</ul>
 							<div id="tabs-1">
 								<%= form_tag(:action => "employerLogin") do  %>	
@@ -88,6 +89,11 @@ $(function()
 							<div id="tabs-2">
 								<%= form_tag(:action => "employerLogin") do  %>	
 									<%= render 'formEmployerLogin' %>
+								<% end %>
+							</div>
+							<div id="tabs-3">
+								<%= form_tag(:action => "employerLogin") do  %>	
+									<%= render 'formEducatorLogin' %>
 								<% end %>
 							</div>
 						</div>

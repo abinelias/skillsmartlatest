@@ -142,6 +142,20 @@ Employee::Application.routes.draw do
 	match "/jobseeker/addSkillNew"				=>		"employee#addSkillNew"
 	match "/jobseeker/popupForSkill"			=>		"employee#popupForSkill"
 	
+	match "/educator/addInstitution"			=>		"educator#addInstitution"
+	match "/educator/institutionUserList"		=>		"educator#institutionUserList"
+	match "/educator/educatorLogin"				=>		"educator#educatorLogin"
+	match "/educator/editInstitution"			=>		"educator#editInstitution"
+	match "/educator/editEducator"				=>		"educator#editEducator"
+	match "/educator/addEducator"				=>		"educator#addEducator" 
+	match "/educator/updateEducator"			=>		"educator#updateEducator"
+	match "/educator/addCourse"					=>		"educator#addCourse"  
+	match "/educator/courseList"				=>		"educator#courseList"
+	match "/educator/editInstitution"			=>		"educator#editInstitution"  
+	match "/educator/updateInstitution"			=>		"educator#updateInstitution"	
+	match "/educator/editCourse"				=>		"educator#editCourse"
+	match "/educator/updateCourse"				=>		"educator#updateCourse"
+	
 	  
   # The priority is based upon order of creation:
   # first created -> highest priority.

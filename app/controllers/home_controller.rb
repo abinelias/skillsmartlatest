@@ -2130,6 +2130,30 @@ class HomeController < ApplicationController
 				@msg								=		"Please enter usernmae"	
 			end	
 		end
+		
+		unless(params[:educatorLogin].nil?)
+			eductorUserName							=		params[:eductorUserName]
+			eductorPassword					    	=		params[:eductorPassword]
+			unless(eductorUserName.nil?)
+				educator_data  						= 		Educator.find_by_educatorUserName(eductorUserName)
+				unless(educator_data.nil?)
+					password						=		educator_data.educatorPassword
+					unless(password.nil?)
+						if(eductorPassword == password)
+							session[:userid]		=		educator_data.id
+							session[:institionID]	=		educator_data.institutionID
+							redirect_to :controller => 'educator', :action => 'courseList'
+						else
+							@msg					=		"username or password is incorrect"
+						end 		
+					end
+				else
+					@msg							=		"username or password is incorrect"	
+				end	
+			else
+				@msg								=		"Please enter usernmae"	
+			end	
+		end
 	end
 	
 	def signout

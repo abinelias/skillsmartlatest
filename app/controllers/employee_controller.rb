@@ -1907,7 +1907,17 @@ require 'json'
 				coursedetails.each do |val|
 										course					=		Course.find_by_id(val.to_s)
 										instution				=		Institution.find_by_id(course.institutionid.to_s)	
-										@courseDetailsArray.push("InstitutionName" => instution.name, "InstitutionAddress1" => instution.location, "InstitutionWebsite" => instution.website, "courseTitle" => course.title, "startdate" => course.startdate, "cost" => course.cost, "timerequired" => course.timerequired  )
+										unless(instution.location.blank?)
+											location			=		instution.location
+										else
+											location			=		instution.city + ' ' + instution.state
+										end	
+										unless(course.timerequired.blank?)
+											time			=		course.timerequired
+										else
+											time			=		course.courseMeet
+										end		
+										@courseDetailsArray.push("InstitutionName" => instution.name, "InstitutionAddress1" => location, "InstitutionWebsite" => instution.website, "courseTitle" => course.title, "startdate" => course.startdate, "cost" => course.cost, "timerequired" => time  )
 								   end
 			end					   
 		end
