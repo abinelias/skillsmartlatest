@@ -114,7 +114,7 @@ function validateForm()
 								<td>Category</td><td><%= select_tag "jobCategory", options_for_select(@jobCategory, @userRole)%></td>
 							</tr>
 							<tr>
-								<td>Hiring Authorities *</td> <td><%= select_tag "sel_tag" "stores[]", options_for_select(@hiringAuthority ,  @hirevalues), :multiple => true ,:style => "width:150px;" %></td>
+								<td>Hiring Authorities*</td> <td><%= select_tag "sel_tag" "stores[]", options_for_select(@hiringAuthority ,  @hirevalues), :multiple => true ,:style => "width:150px;" %></td>
 							</tr>
 							<tr>
 								<td>HR</td><td><%= select_tag "hrManager[]", options_for_select(@hrManager), :multiple => true ,:style => "width:150px;"%></td>

@@ -2010,6 +2010,7 @@ require 'json'
 		@skillData											=		Array.new	
 		@rate												=		Array.new	
 		@totalEmployeeScore									=		0	
+		@totalSkillScore									=		0
 
 		
 		@distHash = Hash["Within 5mi" => 13, "Within 10mi" => 14, "Within 15mi" => 15, "Within 20mi" => 16, "Within 25mi" => 17]
@@ -2172,8 +2173,10 @@ require 'json'
 																		if(value['prof'].to_i >0)
 																			absl	= (value['prof'].to_i - value['employerProf'].to_i).abs
 																			@totalEmployeeScore	=	@totalEmployeeScore + (((value['employerProf'].to_i - absl)*value['employerImp'].to_i)/@gaf)
+																			@totalSkillScore	=	@totalSkillScore	 + (value['employerProf'].to_i * value['employerImp'].to_i)
 																		else
 																			@totalEmployeeScore	=	@totalEmployeeScore + 0
+																			@totalSkillScore	=	@totalSkillScore	 + (value['employerProf'].to_i * value['employerImp'].to_i)																			
 																		end	
 																   end	
 														
@@ -2183,13 +2186,23 @@ require 'json'
 														
 													end	
 													if(@totalEmployeeScore > 0)
-														if(applied.include? val.id.to_s)
-															@cntArray.push( "scoreJob" => @totalEmployeeScore  , "noOpen" => val.numpositions , "JobDesc" => val.description,  "noDays" => vale , "jobID" => val.id,  "compName" => name, "jobDetails" => val.details, "skillName1" => @skillAry[0], "skillName2" => @skillAry[1] , "skillName3" => @skillAry[2] , "skillName4" => @skillAry[3] , "skillName5" => @skillAry[4] , "location" => loc , "display" => "0")	
+														if(@totalSkillScore.to_f > 100)
+															normal					=		@totalSkillScore.to_f/100
+															@totalSkillScore		=		@totalSkillScore.to_f/normal.to_f
+															@totalEmployeeScore		=		@totalEmployeeScore.to_f/normal.to_f
 														else
-															@cntArray.push( "scoreJob" => @totalEmployeeScore  , "noOpen" => val.numpositions , "JobDesc" => val.description,  "noDays" => vale , "jobID" => val.id,  "compName" => name, "jobDetails" => val.details, "skillName1" => @skillAry[0], "skillName2" => @skillAry[1] , "skillName3" => @skillAry[2] , "skillName4" => @skillAry[3] , "skillName5" => @skillAry[4] , "location" => loc , "display" => "1")															
+															normal					=		100/@totalSkillScore.to_f
+															@totalSkillScore		=		@totalSkillScore.to_f*normal.to_f
+															@totalEmployeeScore		=		@totalEmployeeScore.to_f*normal.to_f	
+														end	
+														if(applied.include? val.id.to_s)
+															@cntArray.push( "scoreJob" => @totalEmployeeScore  , "jobScore" => @totalSkillScore , "noOpen" => val.numpositions , "JobDesc" => val.description,  "noDays" => vale , "jobID" => val.id,  "compName" => name, "jobDetails" => val.details, "skillName1" => @skillAry[0], "skillName2" => @skillAry[1] , "skillName3" => @skillAry[2] , "skillName4" => @skillAry[3] , "skillName5" => @skillAry[4] , "location" => loc , "display" => "0")	
+														else
+															@cntArray.push( "scoreJob" => @totalEmployeeScore  , "jobScore" => @totalSkillScore ,  "noOpen" => val.numpositions , "JobDesc" => val.description,  "noDays" => vale , "jobID" => val.id,  "compName" => name, "jobDetails" => val.details, "skillName1" => @skillAry[0], "skillName2" => @skillAry[1] , "skillName3" => @skillAry[2] , "skillName4" => @skillAry[3] , "skillName5" => @skillAry[4] , "location" => loc , "display" => "1")															
 														end
 													end	
 													@totalEmployeeScore			=				0
+													@totalSkillScore			=				0
 													@skillName					=				nil
 													@skillAry.clear
 											end	
