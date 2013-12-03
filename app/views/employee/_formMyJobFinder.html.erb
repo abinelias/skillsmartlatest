@@ -444,7 +444,7 @@ $(document).ready(function(){
 			<% unless(@cntArray.blank?)%>
 				<div id ="total"><tr><td align ="right">Total Number of jobs: <%= @cntArray.size %></td></tr></div>
 				<% @cntArray.each do |value| %>
-					<tr><td class ="fontMyJobsTitle"><% if(value['display'] == "0" ) %> <%=value['JobDesc'] %> <% else %> <a href=/jobseeker/myJobAssessment?jobID=<%=value['jobID'] %> > <%=value['JobDesc'] %> </a> <% end %>(<%=value['scoreJob'] %>)</td></tr>
+					<tr><td class ="fontMyJobsTitle"><% if(value['display'] == "0" ) %> <%=value['JobDesc'] %> <% else %> <a href=/jobseeker/myJobAssessment?jobID=<%=value['jobID'] %> > <%=value['JobDesc'] %> </a> <% end %>(<%=value['scoreJob'].round(2) %>)</td></tr>
 					<tr><td class ="fontMyJobsComp">Company Name : <%=value['compName'] %> , <%=value['location'] %></td></tr
 					<tr><td><%=value['jobDetails'] %></td></tr>
 					<tr><td>No: of positions : <%=value['noOpen'] %></td></tr>

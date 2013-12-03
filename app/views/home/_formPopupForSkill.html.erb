@@ -19,6 +19,7 @@
 
 <script>
 	$(document).ready(function(){
+		$('.popUpButtonForSkill').hide();
 		$('.drop').change(function() 
 		{
 			$.ajax({ 
@@ -53,9 +54,9 @@
 						   $('#txt').append('click checkbox to add your Skill');
 						   $('.my').empty();
 						   $.each(data,function(i, v) {
-						   $('.my').append( $('<div><span>-</span><input id="chk_'+data[i][0]+'" type="checkbox" onchange="validate(\''+data[i][0]+'\')" name="skill" class = "boox" value="'+ data[i][0] +'" /><span >'+data[i][1] +'</span></div>'));
-						   
+						   $('.my').append( $('<div><span>-</span><input id="chk_'+data[i][0]+'" type="checkbox"  name="skill" class = "boox" value="'+ data[i][0] +'" /><span >'+data[i][1] +'</span></div>'));
 						 });
+						 $('.popUpButtonForSkill').show();
 				  } 
 			  });
 		});
@@ -64,55 +65,39 @@
 
 
 
-
 <script>
-	function validate(val)		  
-	{	
-		var jobID 		 	 = 		document.getElementById("jobID");
-		var jobIDVal 		 = 		jobID.value;
-		var chkId="#chk_"+val
-		if($(chkId).is(':checked'))
-		{
-			$.ajax({ 
-					  type: 'GET', 
-					  url: '/home/addRequiredSkills', 
-					  data: {'id' : val, 'jobID' : jobIDVal},
-					  success: function(data) 
-					  {
-							var name = window.opener.$("#skillName");
-							var btn = window.opener.$("#btn");
-							
-							skillname	=	data.skillname
-							skillid		=	data.skillid
-							
-							$(name).append($('<table><tr><td width = "61%"><div class="'+skillid+'">'+skillname+'</div></td><td><div class="'+skillid+'"><select id="rank_'+val+'" onchange="validateRank(\''+val+'\')" ><option value="0">0</option><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option><option value="6">6</option><option value="7">7</option><option value="8">8</option><option value="9">9</option><option value="10">10</option></select></div></td><td><div class="'+skillid+'"><select id="prior_'+val+'" onchange="validatePrior(\''+val+'\')" ><option value="0">0</option><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option><option value="6">6</option><option value="7">7</option><option value="8">8</option><option value="9">9</option><option value="10">10</option></select></div></td><td><div class="'+skillid+'"><select id="drp_'+val+'" onchange="validateDesOrPri(\''+val+'\')" ><option value="1">YES</option><option value="0">NO</option></select></div></td></tr></table>'));
-																																																																																																																																																				
-							$(btn).show();
-							self.close();
-					  } 
-				  });
-		}
-		else
-		{
-			$.ajax({ 
-					  type: 'GET', 
-					  url: '/home/removeRequiredSkills', 
-					  data: {'id' : val, 'jobID' : jobIDVal},
-					  success: function(data) 
-					  {
-							var name = window.opener.$('.'+skillid);
-							skillname	=	data.skillname
-							$(name).remove();
-							if( !$.trim( $('#skill').html() ).length ) 
-							{
-								$("#tabl").hide();
-								$("#btn").hide();
-							}	
-							
-					  } 
-				  });
-		}
-	}
+	$(document).ready(function(){
+		$("button").click(function(){	
+			var jobID 		 	 = 		document.getElementById("jobID");
+			var jobIDVal 		 = 		jobID.value;
+			var counter			 =		0;
+			var skillARY		 =		[];		
+		
+			$("input[name='skill']:checked").each(
+				function(index,value) { 
+					skillARY[(counter)]=value.value;
+					counter=parseInt(counter)+1;	
+			});		
+			
+			if(skillARY.length>0)
+			{
+				$.ajax({ 
+						  type: 'GET', 
+						  url: '/home/addRequiredSkills', 
+						  data: {'id' : skillARY, 'jobID' : jobIDVal},
+						  success: function(data) 
+						  {
+								var name = window.opener.$("#skillName");
+								
+								$.each(data,function(i, v) {
+									$(name).append($('<table><tr><td width = "61%"><div class="'+data[i][0]+'">'+data[i][1]+'</div></td><td><div class="'+data[i][0]+'"><select id="rank_'+data[i][0]+'" onchange="validateRank(\''+data[i][0]+'\')" ><option value="0">0</option><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option><option value="6">6</option><option value="7">7</option><option value="8">8</option><option value="9">9</option><option value="10">10</option></select></div></td><td><div class="'+data[i][0]+'"><select id="prior_'+data[i][0]+'" onchange="validatePrior(\''+data[i][0]+'\')" ><option value="0">0</option><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option><option value="6">6</option><option value="7">7</option><option value="8">8</option><option value="9">9</option><option value="10">10</option></select></div></td><td><div class="'+data[i][0]+'"><select id="drp_'+data[i][0]+'" onchange="validateDesOrPri(\''+data[i][0]+'\')" ><option value="1">YES</option><option value="0">NO</option></select></div></td></tr></table>'));
+									 });																																																																																																																																													
+								self.close();
+						  } 
+					  });
+			}
+		});
+	});	
 </script>
 
 <input type="hidden" value="<%= @id %>"  name="prospect">
@@ -142,6 +127,7 @@
 		<div style="width:100%;">
 			<span id ="txt"></span>
 			<div class="my" style="align:center; width:138%;"></div>
+			<div class="popUpButtonForSkill"><button type="button">Add</button></div>
 		</div>		
 	</div>
 </div>

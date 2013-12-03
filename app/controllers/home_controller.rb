@@ -544,24 +544,22 @@ class HomeController < ApplicationController
 	def addPrequisite
 		unless(params[:jobID].blank?)
 			data 										= 		params[:jobID]
-			pre											=		params[:id]	
-			unless(pre.to_s.nil?)
+			preRequisiteARY								=		params[:id]	
+			@prename									=		Array.new
+			unless(preRequisiteARY.blank?)
 				role = (Jobposting.find_by_id(data)).requiredskills
-				unless(role.blank?)
-					Jobposting.push({:id => data}, :allowedcredentials => pre)
-				    @prename = (Prequisite.find_by_id(pre)).name
-					render :json => {
-									  :prename => @prename,
-									  :preid => pre
-								   }
-				else
-					Jobposting.push({:id => data}, :allowedcredentials => pre)
-					@prename = (Prequisite.find_by_id(pre)).name
-					render :json => {
-									  :prename => @prename,
-									  :preid => pre
-								   }
-				end
+				preRequisiteARY.each do |val|
+											unless(role.blank?)
+												Jobposting.push({:id => data}, :allowedcredentials => val)
+												@prename.push(Prequisite.find_by_id(val))
+												
+											else
+												Jobposting.push({:id => data}, :allowedcredentials => val)
+												@prename.push(Prequisite.find_by_id(val))
+												
+											end
+									end
+				render :json => @prename.map{|c| [c.id, c.name]}					
 			end
 		end
 	end	
@@ -741,24 +739,21 @@ class HomeController < ApplicationController
 	def addRequiredSkills
 		unless(params[:jobID].blank?)
 			data 											= 		params[:jobID]
-			skill											=		params[:id]	
-			unless(skill.to_s.nil?)
+			skillARY										=		params[:id]	
+			@skillName										=		Array.new
+			unless(data.to_s.nil?)
 				role = (Jobposting.find_by_id(data)).requiredskills
-				unless(role.blank?)
-					Jobposting.push({:id => data}, :requiredskills => skill)
-				    @skillname = (Skill.find_by_id(skill)).name
-					render :json => {
-									  :skillname => @skillname,
-									  :skillid => skill
-								   }
-				else
-					Jobposting.push({:id => data}, :requiredskills => skill)
-					@skillname = (Skill.find_by_id(skill)).name
-					render :json => {
-									  :skillname => @skillname,
-									  :skillid => skill
-								   }
-				end
+				skillARY.each do |val|
+									unless(role.blank?)
+										Jobposting.push({:id => data}, :requiredskills => val)
+										@skillName.push(Skill.find_by_id(val))
+										
+									else
+										Jobposting.push({:id => data}, :requiredskills => val)
+										@skillName.push(Skill.find_by_id(val))
+									end
+							end
+				render :json => @skillName.map{|c| [c.id, c.name]}
 			end
 		end
 	end

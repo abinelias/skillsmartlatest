@@ -2196,9 +2196,9 @@ require 'json'
 															@totalEmployeeScore		=		@totalEmployeeScore.to_f*normal.to_f	
 														end	
 														if(applied.include? val.id.to_s)
-															@cntArray.push( "scoreJob" => @totalEmployeeScore  , "jobScore" => @totalSkillScore , "noOpen" => val.numpositions , "JobDesc" => val.description,  "noDays" => vale , "jobID" => val.id,  "compName" => name, "jobDetails" => val.details, "skillName1" => @skillAry[0], "skillName2" => @skillAry[1] , "skillName3" => @skillAry[2] , "skillName4" => @skillAry[3] , "skillName5" => @skillAry[4] , "location" => loc , "display" => "0")	
+															@cntArray.push( "scoreJob" => @totalEmployeeScore.to_f  , "jobScore" => @totalSkillScore , "noOpen" => val.numpositions , "JobDesc" => val.description,  "noDays" => vale , "jobID" => val.id,  "compName" => name, "jobDetails" => val.details, "skillName1" => @skillAry[0], "skillName2" => @skillAry[1] , "skillName3" => @skillAry[2] , "skillName4" => @skillAry[3] , "skillName5" => @skillAry[4] , "location" => loc , "display" => "0")	
 														else
-															@cntArray.push( "scoreJob" => @totalEmployeeScore  , "jobScore" => @totalSkillScore ,  "noOpen" => val.numpositions , "JobDesc" => val.description,  "noDays" => vale , "jobID" => val.id,  "compName" => name, "jobDetails" => val.details, "skillName1" => @skillAry[0], "skillName2" => @skillAry[1] , "skillName3" => @skillAry[2] , "skillName4" => @skillAry[3] , "skillName5" => @skillAry[4] , "location" => loc , "display" => "1")															
+															@cntArray.push( "scoreJob" => @totalEmployeeScore.to_f  , "jobScore" => @totalSkillScore ,  "noOpen" => val.numpositions , "JobDesc" => val.description,  "noDays" => vale , "jobID" => val.id,  "compName" => name, "jobDetails" => val.details, "skillName1" => @skillAry[0], "skillName2" => @skillAry[1] , "skillName3" => @skillAry[2] , "skillName4" => @skillAry[3] , "skillName5" => @skillAry[4] , "location" => loc , "display" => "1")															
 														end
 													end	
 													@totalEmployeeScore			=				0

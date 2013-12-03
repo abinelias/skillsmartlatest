@@ -15,8 +15,11 @@
 	
 </style>
 
+
+
 <script>
 	$(document).ready(function(){
+		$('.popUpButton').hide();
 		$('.preDrop').change(function() 
 		{
 			$.ajax({ 
@@ -50,10 +53,11 @@
 						   $('#preTxt').empty();	
 						   $('#preTxt').append('click checkbox to add Prerequsites');
 						   $('.thirdPre').empty();
-						   $.each(data,function(i, v) {
-						   $('.thirdPre').append( $('<div><span>-</span><input id="prechk_'+data[i][0]+'" type="checkbox" onchange="validatepre(\''+data[i][0]+'\')" name="prerequsite" class = "preboox" value="'+ data[i][0] +'" /><span >'+data[i][1] +'</span></div>'));
-						  
-						 });
+						   $.each(data,function(i, v) 
+						   {
+								$('.thirdPre').append( $('<div><span>-</span><input id="prechk_'+data[i][0]+'" type="checkbox"  name="prerequsite" class = "preboox" value="'+ data[i][0] +'" /><span >'+data[i][1] +'</span></div>'));
+						   });
+						   $('.popUpButton').show();
 				  } 
 			  });
 		});
@@ -61,37 +65,41 @@
 </script>
 
 <script>
-	function validatepre(val)		  
-	{	
-		var jobID 		 	 = 		document.getElementById("jobID");
-		var jobIDVal 		 = 		jobID.value;
-		var prechkId		 =		"#prechk_"+val
-		if($(prechkId).is(':checked'))
-		{
-			$.ajax({ 
-					  type: 'GET', 
-					  url: '/home/addPrequisite', 
-					  data: {'id' : val, 'jobID' : jobIDVal},
-					  success: function(data) 
-					  {
-					  
-							var preName = window.opener.$("#preName");
-							var butn = window.opener.$("#butn");
-							var header = window.opener.$("#header");
-							
-							prename		=	data.prename
-							preid		=	data.preid
-							
-							$(preName).append($('<table><tr><td width = "77%"><div class="'+preid+'">'+prename+'</div></td><td><div class="'+preid+'"><select id="drp_'+val+'" ><option value="0">Required</option><option value="1">Prefered</option><option value="2">Acceptable</option></select></div></td></tr></table>'));
-							$(butn).show();
-							$(header).show();							
-							self.close();
-							
-					 } 
-				  });
-		}
+	$(document).ready(function(){
+		$("button").click(function(){	
+			var jobID 		 	 = 		document.getElementById("jobID");
+			var jobIDVal 		 = 		jobID.value;
+			var counter			 =		0;
+			var preRequisiteARY	 =		[];		
 		
-	}
+			$("input[name='prerequsite']:checked").each(
+				function(index,value) { 
+					preRequisiteARY[(counter)]=value.value;
+					counter=parseInt(counter)+1;	
+			});		
+			
+			if(preRequisiteARY.length>0)
+			{
+				$.ajax({ 
+						  type: 'GET', 
+						  url: '/home/addPrequisite', 
+						  data: {'id' : preRequisiteARY, 'jobID' : jobIDVal},
+						  success: function(data) 
+						  {
+						  
+								var preName = window.opener.$("#preName");
+								$.each(data,function(i, v) {
+								   $(preName).append($('<table><tr><td width = "77%"><div class="'+data[i][0]+'">'+data[i][1]+'</div></td><td><div class="'+data[i][0]+'"><select id="drp_'+data[i][0]+'" ><option value="0">Required</option><option value="1">Prefered</option><option value="2">Acceptable</option></select></div></td></tr></table>'));
+								 });
+								
+								
+								self.close();
+								
+						 } 
+					  });
+			}
+		});
+	});	
 </script>
 
 <input type="hidden" value="<%= @id %>"  name="prospect">
@@ -123,5 +131,6 @@
 	<div style="width:100%;">
 		<span id ="preTxt"></span>
 		<div class="thirdPre" style="align:center; width:60%;"></div>
+		<div class="popUpButton"><button type="button">Add</button></div>
 	</div>		
 </div>
