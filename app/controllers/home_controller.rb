@@ -2189,10 +2189,14 @@ class HomeController < ApplicationController
 											   end
 		
 		@jobs["Select a job"]							=		""									   
-		Jobposting.where(:postingcompany => session[:postingcompany]).all.each do |value|
+		Jobposting.where(:postingcompany => session[:postingcompany].to_s).all.each do |value|
 												   @jobs[value.description] 				= 		value.id
-											   end									   
-											   
+											   end	
+		if(session[:postingcompany].to_s == "52665972f1bb5515dc00e206")
+			Jobposting.where(:id => "5255726bc720b20d1c00227e").each do |val|
+														@jobs[val.description] 				= 		val.id	
+													end
+		end									   								   
 		unless(params[:search].nil?)
 			params[:skill].each do |val|
 									Portfolioitemskill.where(:skillid => val.to_s).all.each do |vale|
@@ -2209,7 +2213,6 @@ class HomeController < ApplicationController
 										keywordsUser.push((Prospect.find_by_id(val.to_s)).employeeusername)
 									end	
 			keywordsUser							   = 		keywordsUser.uniq
-			render :text => keywordsUser
 		end									   
 	end
 	
