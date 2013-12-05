@@ -2193,9 +2193,7 @@ class HomeController < ApplicationController
 												   @jobs[value.description] 				= 		value.id
 											   end	
 		if(session[:postingcompany].to_s == "52665972f1bb5515dc00e206")
-			Jobposting.where(:id => "5255726bc720b20d1c00227e").each do |val|
-														@jobs[val.description] 				= 		val.id	
-													end
+			@jobs.merge!("Information Asurance Engineer" => "5255726bc720b20d1c00227e")
 		end									   								   
 		unless(params[:search].nil?)
 			params[:skill].each do |val|
