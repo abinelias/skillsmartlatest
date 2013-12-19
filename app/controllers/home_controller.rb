@@ -2194,7 +2194,8 @@ class HomeController < ApplicationController
 											   end	
 		if(session[:postingcompany].to_s == "52665972f1bb5515dc00e206")
 			@jobs.merge!("Information Asurance Engineer" => "5255726bc720b20d1c00227e")
-		end									   								   
+		end	
+									   								   
 		unless(params[:search].nil?)
 			params[:skill].each do |val|
 									Portfolioitemskill.where(:skillid => val.to_s).all.each do |vale|

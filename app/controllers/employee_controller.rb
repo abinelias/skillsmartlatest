@@ -1708,12 +1708,10 @@ require 'json'
 		@prerequisiteArray									=		Array.new	
 		@requiredArray										=		Array.new
 		@desiredArray										=		Array.new	
-		@count												=		0
-		@cont												=		0	
-		@ct													=		0	
-		@totalEmployeeScore									=		0	
 		@skillData											=		Array.new
 		@rate												=		Array.new	
+		@totalSkillScore									=		0
+		@totalEmployeeScore									=		0	
 		
 					
 		unless(params[:jobID].nil?)
@@ -1833,68 +1831,84 @@ require 'json'
 						end	
 				end	
 			end
-						
-			@rate.each do |value|
-							if((value['prof'].to_i == 1) && (value['employerProf'].to_i == 1))
-								@gaf		=	1
-							elsif((value['prof'].to_i == 1) && (value['employerProf'].to_i == 2))	
-								@gaf		=	1.05
-							elsif((value['prof'].to_i == 1) && (value['employerProf'].to_i == 3))
-								@gaf		=	1.1
-							elsif((value['prof'].to_i == 1) && (value['employerProf'].to_i == 4))
-								@gaf		=	1.15
-							elsif((value['prof'].to_i == 1) && (value['employerProf'].to_i == 5))
-								@gaf		=	1.2
-							elsif((value['prof'].to_i == 2) && (value['employerProf'].to_i == 1))
-								@gaf		=	1.05
-							elsif((value['prof'].to_i == 2) && (value['employerProf'].to_i == 2))
-								@gaf		=	1
-							elsif((value['prof'].to_i == 2) && (value['employerProf'].to_i == 3))
-								@gaf		=	1.05
-							elsif((value['prof'].to_i == 2) && (value['employerProf'].to_i == 4))
-								@gaf		=	1.1
-							elsif((value['prof'].to_i == 2) && (value['employerProf'].to_i == 5))
-								@gaf		=	1.15
-							elsif((value['prof'].to_i == 3) && (value['employerProf'].to_i == 1))
-								@gaf		=	1.1
-							elsif((value['prof'].to_i == 3) && (value['employerProf'].to_i == 2))
-								@gaf		=	1.05
-							elsif((value['prof'].to_i == 3) && (value['employerProf'].to_i == 3))
-								@gaf		=	1
-							elsif((value['prof'].to_i == 3) && (value['employerProf'].to_i == 4))
-								@gaf		=	1.05
-							elsif((value['prof'].to_i == 3) && (value['employerProf'].to_i == 5))
-								@gaf		=	1.1
-							elsif((value['prof'].to_i == 4) && (value['employerProf'].to_i == 1))
-								@gaf		=	1.15
-							elsif((value['prof'].to_i == 4) && (value['employerProf'].to_i == 2))
-								@gaf		=	1.1
-							elsif((value['prof'].to_i == 4) && (value['employerProf'].to_i == 3))
-								@gaf		=	1.05
-							elsif((value['prof'].to_i == 4) && (value['employerProf'].to_i == 4))
-								@gaf		=	1
-							elsif((value['prof'].to_i == 4) && (value['employerProf'].to_i == 5))
-								@gaf		=	1.05
-							elsif((value['prof'].to_i == 5) && (value['employerProf'].to_i == 1))
-								@gaf		=	1.2
-							elsif((value['prof'].to_i == 5) && (value['employerProf'].to_i == 2))
-								@gaf		=	1.15
-							elsif((value['prof'].to_i == 5) && (value['employerProf'].to_i == 3))
-								@gaf		=	1.1
-							elsif((value['prof'].to_i == 5) && (value['employerProf'].to_i == 4))
-								@gaf		=	1.05
-							elsif((value['prof'].to_i == 5) && (value['employerProf'].to_i == 5))
-								@gaf		=	1
-							else
-								@gaf		=	1	
-							end	
-							if(value['prof'].to_i >0)
-								absl	= (value['prof'].to_i - value['employerProf'].to_i).abs
-								@totalEmployeeScore	=	@totalEmployeeScore + (((value['employerProf'].to_i - absl)*value['employerImp'].to_i)/@gaf)
-							else
-								@totalEmployeeScore	=	@totalEmployeeScore + 0
-							end	
-					   end
+			
+			if(params[:scr].nil?)			
+				@rate.each do |value|
+								if((value['prof'].to_i == 1) && (value['employerProf'].to_i == 1))
+									@gaf		=	1
+								elsif((value['prof'].to_i == 1) && (value['employerProf'].to_i == 2))	
+									@gaf		=	1.05
+								elsif((value['prof'].to_i == 1) && (value['employerProf'].to_i == 3))
+									@gaf		=	1.1
+								elsif((value['prof'].to_i == 1) && (value['employerProf'].to_i == 4))
+									@gaf		=	1.15
+								elsif((value['prof'].to_i == 1) && (value['employerProf'].to_i == 5))
+									@gaf		=	1.2
+								elsif((value['prof'].to_i == 2) && (value['employerProf'].to_i == 1))
+									@gaf		=	1.05
+								elsif((value['prof'].to_i == 2) && (value['employerProf'].to_i == 2))
+									@gaf		=	1
+								elsif((value['prof'].to_i == 2) && (value['employerProf'].to_i == 3))
+									@gaf		=	1.05
+								elsif((value['prof'].to_i == 2) && (value['employerProf'].to_i == 4))
+									@gaf		=	1.1
+								elsif((value['prof'].to_i == 2) && (value['employerProf'].to_i == 5))
+									@gaf		=	1.15
+								elsif((value['prof'].to_i == 3) && (value['employerProf'].to_i == 1))
+									@gaf		=	1.1
+								elsif((value['prof'].to_i == 3) && (value['employerProf'].to_i == 2))
+									@gaf		=	1.05
+								elsif((value['prof'].to_i == 3) && (value['employerProf'].to_i == 3))
+									@gaf		=	1
+								elsif((value['prof'].to_i == 3) && (value['employerProf'].to_i == 4))
+									@gaf		=	1.05
+								elsif((value['prof'].to_i == 3) && (value['employerProf'].to_i == 5))
+									@gaf		=	1.1
+								elsif((value['prof'].to_i == 4) && (value['employerProf'].to_i == 1))
+									@gaf		=	1.15
+								elsif((value['prof'].to_i == 4) && (value['employerProf'].to_i == 2))
+									@gaf		=	1.1
+								elsif((value['prof'].to_i == 4) && (value['employerProf'].to_i == 3))
+									@gaf		=	1.05
+								elsif((value['prof'].to_i == 4) && (value['employerProf'].to_i == 4))
+									@gaf		=	1
+								elsif((value['prof'].to_i == 4) && (value['employerProf'].to_i == 5))
+									@gaf		=	1.05
+								elsif((value['prof'].to_i == 5) && (value['employerProf'].to_i == 1))
+									@gaf		=	1.2
+								elsif((value['prof'].to_i == 5) && (value['employerProf'].to_i == 2))
+									@gaf		=	1.15
+								elsif((value['prof'].to_i == 5) && (value['employerProf'].to_i == 3))
+									@gaf		=	1.1
+								elsif((value['prof'].to_i == 5) && (value['employerProf'].to_i == 4))
+									@gaf		=	1.05
+								elsif((value['prof'].to_i == 5) && (value['employerProf'].to_i == 5))
+									@gaf		=	1
+								else
+									@gaf		=	1	
+								end	
+								if(value['prof'].to_i >0)
+									absl	= (value['prof'].to_i - value['employerProf'].to_i).abs
+									@totalEmployeeScore	=	@totalEmployeeScore + (((value['employerProf'].to_i - absl)*value['employerImp'].to_i)/@gaf)
+									@totalSkillScore	=	@totalSkillScore	 + (value['employerProf'].to_i * value['employerImp'].to_i)
+								else
+									@totalEmployeeScore	=	@totalEmployeeScore + 0
+									@totalSkillScore	=	@totalSkillScore	 + (value['employerProf'].to_i * value['employerImp'].to_i)																			
+								end	
+						   end
+				if(@totalEmployeeScore > 0)
+					if(@totalSkillScore.to_f > 100)
+						normal					=		@totalSkillScore.to_f/100
+						@totalEmployeeScore		=		@totalEmployeeScore.to_f/normal.to_f
+					else
+						normal					=		100/@totalSkillScore.to_f
+						@totalEmployeeScore		=		@totalEmployeeScore.to_f*normal.to_f	
+					end	
+				end	
+			else
+				@totalEmployeeScore				=		params[:scr]
+			end	
+			   
 		end
 	end
 	
@@ -2188,26 +2202,26 @@ require 'json'
 													if(@totalEmployeeScore > 0)
 														if(@totalSkillScore.to_f > 100)
 															normal					=		@totalSkillScore.to_f/100
-															@totalSkillScore		=		@totalSkillScore.to_f/normal.to_f
 															@totalEmployeeScore		=		@totalEmployeeScore.to_f/normal.to_f
 														else
 															normal					=		100/@totalSkillScore.to_f
-															@totalSkillScore		=		@totalSkillScore.to_f*normal.to_f
 															@totalEmployeeScore		=		@totalEmployeeScore.to_f*normal.to_f	
 														end	
 														if(applied.include? val.id.to_s)
-															@cntArray.push( "scoreJob" => @totalEmployeeScore.to_f  , "jobScore" => @totalSkillScore , "noOpen" => val.numpositions , "JobDesc" => val.description,  "noDays" => vale , "jobID" => val.id,  "compName" => name, "jobDetails" => val.details, "skillName1" => @skillAry[0], "skillName2" => @skillAry[1] , "skillName3" => @skillAry[2] , "skillName4" => @skillAry[3] , "skillName5" => @skillAry[4] , "location" => loc , "display" => "0")	
+															@cntArray.push( "scoreJob" => @totalEmployeeScore.to_f  ,  "noOpen" => val.numpositions , "JobDesc" => val.description,  "noDays" => vale , "jobID" => val.id,  "compName" => name, "jobDetails" => val.details, "skillName1" => @skillAry[0], "skillName2" => @skillAry[1] , "skillName3" => @skillAry[2] , "skillName4" => @skillAry[3] , "skillName5" => @skillAry[4] , "location" => loc , "display" => "0")	
 														else
 															@cntArray.push( "scoreJob" => @totalEmployeeScore.to_f  , "jobScore" => @totalSkillScore ,  "noOpen" => val.numpositions , "JobDesc" => val.description,  "noDays" => vale , "jobID" => val.id,  "compName" => name, "jobDetails" => val.details, "skillName1" => @skillAry[0], "skillName2" => @skillAry[1] , "skillName3" => @skillAry[2] , "skillName4" => @skillAry[3] , "skillName5" => @skillAry[4] , "location" => loc , "display" => "1")															
 														end
 													end	
 													@totalEmployeeScore			=				0
 													@totalSkillScore			=				0
+													@gaf						=				0
+													normal						=				0
 													@skillName					=				nil
 													@skillAry.clear
 											end	
 			unless(@cntArray.blank?)
-					@cntArray.sort_by! {|e| -e["scoreJob"] }
+				@cntArray.sort_by! {|e| -e["scoreJob"] }
 			end											
 		end	
 	end
@@ -2384,6 +2398,7 @@ require 'json'
 			@skillData											=		Array.new	
 			@rate												=		Array.new	
 			@totalEmployeeScore									=		0
+			@totalSkillScore									=		0
 			
 			@cnt_data.each do |val|  
 								@zip.push((Employer.find_by_id(val.postingcompany)).zip)
@@ -2539,8 +2554,10 @@ require 'json'
 																				if(value['prof'].to_i >0)
 																					absl	= (value['prof'].to_i - value['employerProf'].to_i).abs
 																					@totalEmployeeScore	=	@totalEmployeeScore + (((value['employerProf'].to_i - absl)*value['employerImp'].to_i)/@gaf)
+																					@totalSkillScore	=	@totalSkillScore	 + (value['employerProf'].to_i * value['employerImp'].to_i)
 																				else
 																					@totalEmployeeScore	=	@totalEmployeeScore + 0
+																					@totalSkillScore	=	@totalSkillScore	 + (value['employerProf'].to_i * value['employerImp'].to_i)																			
 																				end	
 																		   end	
 																
@@ -2550,12 +2567,22 @@ require 'json'
 																
 															end	
 															if(@totalEmployeeScore > 0)
-																@cntArray.push( "distance" => vale , "copmanyPost" => val.numpositions , "scoreJob" => @totalEmployeeScore  , "noOpen" => val.numpositions , "JobDesc" => val.description,  "noDays" => va  , "salary" => val.salary, "jobID" => val.id, "type" => companytype,  "compName" => name, "jobDetails" => val.details, "skillName1" => @skillAry[0], "skillName2" => @skillAry[1] , "skillName3" => @skillAry[2] , "skillName4" => @skillAry[3] , "skillName5" => @skillAry[4] , "location" => loc )	
+																if(@totalSkillScore.to_f > 100)
+																	normal					=		@totalSkillScore.to_f/100
+																	@totalEmployeeScore		=		@totalEmployeeScore.to_f/normal.to_f
+																else
+																	normal					=		100/@totalSkillScore.to_f
+																	@totalEmployeeScore		=		@totalEmployeeScore.to_f*normal.to_f	
+																end	
+																@cntArray.push( "scoreJob" => @totalEmployeeScore.to_f  ,  "noOpen" => val.numpositions , "JobDesc" => val.description,  "noDays" => vale , "jobID" => val.id,  "compName" => name, "jobDetails" => val.details, "skillName1" => @skillAry[0], "skillName2" => @skillAry[1] , "skillName3" => @skillAry[2] , "skillName4" => @skillAry[3] , "skillName5" => @skillAry[4] , "location" => loc , "display" => "0")	
 															end	
 															@totalEmployeeScore			=				0
+															@totalSkillScore			=				0
+															@gaf						=				0
+															normal						=				0
 															@skillName					=				nil
 															@skillAry.clear
-														end
+											end	
 				 unless(@cntArray.blank?)
 					@cntArray.sort_by! {|e| -e["scoreJob"] }
 				end															
