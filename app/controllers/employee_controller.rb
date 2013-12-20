@@ -1906,7 +1906,7 @@ require 'json'
 					end	
 				end	
 			else
-				@totalEmployeeScore				=		params[:scr]
+				@totalEmployeeScore				=		params[:scr].to_f
 			end	
 			   
 		end
