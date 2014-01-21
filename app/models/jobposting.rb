@@ -30,12 +30,5 @@ class Jobposting
 	
     timestamps!
 
-    validates_presence_of :postingcompany
-    validates_presence_of :jobid
-    validates_presence_of :description
-    validates_presence_of :dateopen
-    validates_numericality_of :numpositions
-    validates_numericality_of :salary
-    validates_presence_of :hiringauthority
-    validates_presence_of :status
+   
 end
