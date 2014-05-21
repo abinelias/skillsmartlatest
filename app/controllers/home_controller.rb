@@ -217,7 +217,6 @@ class HomeController < ApplicationController
 			manager				  						= 		params[:manager]
 			reviewer			  						= 		params[:reviewer]
 			details										=		params[:details]
-			
 			unless(tagAry.nil?)
 				tagsval  								= 		tagAry.join(',')
 			end

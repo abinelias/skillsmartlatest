@@ -240,8 +240,9 @@ class EducatorController < ApplicationController
 			noOfStudents 			  				= 		params[:noOfStudents]
 			skills		 			  				= 		params[:skill]
 			courseDescription		  				= 		params[:courseDescription]
+			courseUrl								=		params[:courseURL]	
 			unless(session[:institionID].nil?)
-				course								=		Course.new(:institutionid => session[:institionID].to_s, :title => courseTitle.to_s, :cost => cost, :startdate => courseStartDate, :endDate => courseEndDate , :courseIdNo => courseIDNumber , :courseRegisterURL => courseRegister , :enrollStartPeriod => enrollmentStartDate, :enrollEndPeriod => enrollmentEndDate , :courseMeet => courseMeets, :numberStudent => noOfStudents , :description => courseDescription)
+				course								=		Course.new(:institutionid => session[:institionID].to_s, :title => courseTitle.to_s, :cost => cost, :startdate => courseStartDate, :endDate => courseEndDate , :courseIdNo => courseIDNumber , :courseRegisterURL => courseRegister , :enrollStartPeriod => enrollmentStartDate, :enrollEndPeriod => enrollmentEndDate , :courseMeet => courseMeets, :numberStudent => noOfStudents , :description => courseDescription, :websiteUrl => courseUrl)
 				if(course.save == true)
 					courseID						=		course.id
 					skills.each do |val|
@@ -261,7 +262,7 @@ class EducatorController < ApplicationController
         end				    		
 		unless(params[:courseID].blank?)
 			data									=		Course.find_by_id(params[:courseID].to_s)
-			@courseData.push("title" => data.title, "startdate" => data.startdate, "cost" => data.cost, "endDate" => data.endDate, "courseIdNo" => data.courseIdNo, "courseRegisterURL" => data.courseRegisterURL, "enrollStartPeriod" => data.enrollStartPeriod, "enrollEndPeriod" => data.enrollEndPeriod, "courseMeet" => data.courseMeet, "numberStudent" => data.numberStudent, "description" => data.description)
+			@courseData.push("title" => data.title, "startdate" => data.startdate, "cost" => data.cost, "endDate" => data.endDate, "courseIdNo" => data.courseIdNo, "courseRegisterURL" => data.courseRegisterURL, "enrollStartPeriod" => data.enrollStartPeriod, "enrollEndPeriod" => data.enrollEndPeriod, "courseMeet" => data.courseMeet, "numberStudent" => data.numberStudent, "description" => data.description, "courseUrl" => data.websiteUrl)
 		end
 	end
 	
@@ -280,6 +281,8 @@ class EducatorController < ApplicationController
 			courseEndDate 			  				= 		params[:courseEndDate]
 			courseMeets	 			  				= 		params[:courseMeets]
 			noOfStudents 			  				= 		params[:noOfStudents]
+			courseWeb								=		params[:courseURL]
+	
 			unless(params[:courseID].nil?)
 				course								=		Course.find_by_id(params[:courseID].to_s)
 				unless(course.nil?)
@@ -293,6 +296,7 @@ class EducatorController < ApplicationController
 					course.endDate 					= 		courseEndDate
 					course.courseMeet 				= 		courseMeets
 					course.numberStudent			= 		noOfStudents
+					course.websiteUrl				= 		courseWeb
 					result 							= 		course.save
 					if(result == true)
 						@msg     					= 		"successfully inserted"

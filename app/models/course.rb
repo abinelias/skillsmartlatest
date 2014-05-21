@@ -14,6 +14,7 @@ class Course
     key :numberStudent, String
     key :description, String
     key :timerequired, String
+    key :websiteUrl, String
     
 
     timestamps!

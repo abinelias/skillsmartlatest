@@ -1931,7 +1931,12 @@ require 'json'
 										else
 											time			=		course.courseMeet
 										end		
-										@courseDetailsArray.push("InstitutionName" => instution.name, "InstitutionAddress1" => location, "InstitutionWebsite" => instution.website, "courseTitle" => course.title, "startdate" => course.startdate, "cost" => course.cost, "timerequired" => time  )
+										unless(course.websiteUrl.blank?)
+											url			=		course.websiteUrl
+										else
+											url			=		instution.website
+										end	
+										@courseDetailsArray.push("InstitutionName" => instution.name, "InstitutionAddress1" => location, "InstitutionWebsite" => url, "courseTitle" => course.title, "startdate" => course.startdate, "cost" => course.cost, "timerequired" => time  )
 								   end
 			end					   
 		end
